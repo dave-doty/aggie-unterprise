@@ -136,7 +136,7 @@ I may put this on [PyPI](https://pypi.org/) eventually so that it can be install
 ![](images/env-var-search.png)\
 and editing or adding (if necessary) a variable named PYTHONPATH with value `C:\git\aggie-enterprise`:\
 ![](images/env-var-set.png)\
-In Linux/Mac, using the bash shell, this can be done by adding the line `PYTHONPATH=$PYTHONPATH:/mnt/c/git/aggie-enterprise`.
+In Linux/Mac, using the bash shell, this can be done by adding the line `PYTHONPATH=$PYTHONPATH:/mnt/c/git/aggie-enterprise` to the file `.bashrc` in your home directory.
 
 3. **Install dependencies**: Type `pip install openpyxl tabulate` at the command line.
 

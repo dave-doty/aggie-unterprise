@@ -46,7 +46,7 @@ Difference between August and July
 
 The first two tables summarize total balance, expenses, broken down by type of expenses, for several grants for two different months. These are the totals since the start of the grant. Since we sometimes care about monthly spending, the third table shows the *differences* between months, to indicate for instance, how much money was spent on supplies during July ($2,458.96 spent during July = $8,847.54 total spent by August - $6,388.58 total spent by July).
 
-[AggieEnterprise](https://aggieenterprise.ucdavis.edu/) is a software system used by [UC Davis](https://www.ucdavis.edu/) that starts with the useful information above, and then tasks itself with adding loads of noise to it, resulting in a spreadsheet with redundant and useless information like this:
+[AggieEnterprise](https://aggieenterprise.ucdavis.edu/) is a software system used by [UC Davis](https://www.ucdavis.edu/) that starts with the useful information above, and then buries that information underneath loads of gibberish, resulting in a spreadsheet with redundant and useless information like this:
 
 ![AggieEnterprise spreadsheet screenshot](images/spreadsheet.png)
 

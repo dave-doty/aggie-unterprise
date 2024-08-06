@@ -132,9 +132,9 @@ I may put this on [PyPI](https://pypi.org/) eventually so that it can be install
 
 1. **Clone the repo**: `git clone https://github.com/dave-doty/aggie-unterprise.git`
 
-2. **Add to PYTHONPATH**: Assuming for example that you cloned the repository to the directory `C:\git\aggie-enterprise`, add the directory to your PYTHONPATH. In Windows this is done by going to settings and searching for "Environment Variables":
+2. **Add to PYTHONPATH**: Assuming for example that you cloned the repository to the directory `C:\git\aggie-enterprise`, add the directory to your PYTHONPATH. In Windows this is done by going to settings and searching for "Environment Variables":\
 ![](images/env-var-search.png)\
-and editing or adding (if necessary) a variable named PYTHONPATH with value `C:\git\aggie-enterprise`:
+and editing or adding (if necessary) a variable named PYTHONPATH with value `C:\git\aggie-enterprise`:\
 ![](images/env-var-set.png)\
 In Linux/Mac, using the bash shell, this can be done by adding the line `PYTHONPATH=$PYTHONPATH:/mnt/c/git/aggie-enterprise`.
 

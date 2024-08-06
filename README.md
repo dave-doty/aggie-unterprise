@@ -14,28 +14,6 @@ Totals for August
 | REU CAREER Chemical Computation    |  \$18,750.37 |  \$44,062.63 |  \$43,180.29 |      \$0.00 |     \$0.00 |    \$882.34 |       \$0.00 |       \$0.00 |  \$62,813.00 |
 | DOE Office of Science Basic Energy |  \$51,372.51 |  \$15,045.49 |   \$8,642.86 |      \$0.00 |     \$0.00 |    \$760.57 |       \$0.00 |   \$5,642.06 |  \$66,418.00 |
 
-Totals for July
-| Project Name                       |       Balance |     Expenses |       Salary |      Travel |   Supplies |      Fringe |   Fellowship |     Indirect |       Budget |
-|------------------------------------|---------------|--------------|--------------|-------------|------------|-------------|--------------|--------------|--------------|
-| INDIRECT COST RETURN               |      \$904.00 |       \$0.00 |       \$0.00 |      \$0.00 |     \$0.00 |      \$0.00 |       \$0.00 |       \$0.00 |     \$904.00 |
-| DISCRETIONARY FUNDS                |    \$2,500.00 |       \$0.00 |       \$0.00 |      \$0.00 |     \$0.00 |      \$0.00 |       \$0.00 |       \$0.00 |   \$2,500.00 |
-| NSF Engineering DNA and RNA        |  \$351,084.80 |  \$28,915.20 |  \$16,500.00 |      \$0.00 |   \$120.00 |  \$1,452.00 |       \$0.00 |  \$10,843.20 | \$380,000.00 |
-| NSF CAREER Chemical Computation    | (\$44,997.85) | \$453,652.85 | \$206,470.48 | \$29,829.98 | \$6,388.58 | \$58,419.11 |   \$8,993.12 | \$143,551.58 | \$408,655.00 |
-| REU CAREER Chemical Computation    |   \$18,750.37 |  \$44,062.63 |  \$43,180.29 |      \$0.00 |     \$0.00 |    \$882.34 |       \$0.00 |       \$0.00 |  \$62,813.00 |
-| DOE Office of Science Basic Energy |   \$51,372.51 |  \$15,045.49 |   \$8,642.86 |      \$0.00 |     \$0.00 |    \$760.57 |       \$0.00 |   \$5,642.06 |  \$66,418.00 |
-
-Difference between August and July
-| Project Name                       |    Expenses |      Salary |     Travel |   Supplies |     Fringe |   Fellowship |    Indirect |       Balance |
-|------------------------------------|-------------|-------------|------------|------------|------------|--------------|-------------|---------------|
-| INDIRECT COST RETURN               |      \$0.00 |      \$0.00 |     \$0.00 |     \$0.00 |     \$0.00 |       \$0.00 |      \$0.00 |        \$0.00 |
-| DISCRETIONARY FUNDS                |      \$0.00 |      \$0.00 |     \$0.00 |     \$0.00 |     \$0.00 |       \$0.00 |      \$0.00 |        \$0.00 |
-| NSF Engineering DNA and RNA        | \$32,401.41 | \$18,300.00 |     \$0.00 |    \$13.40 | \$1,811.70 |       \$0.00 | \$12,276.31 | (\$32,401.41) |
-| NSF CAREER Chemical Computation    | \$14,347.87 |  \$5,275.73 | \$3,504.27 | \$2,458.96 |   \$100.24 | (\$3,826.31) |  \$6,834.98 |   \$62,178.13 |
-| REU CAREER Chemical Computation    |      \$0.00 |      \$0.00 |     \$0.00 |     \$0.00 |     \$0.00 |       \$0.00 |      \$0.00 |        \$0.00 |
-| DOE Office of Science Basic Energy |      \$0.00 |      \$0.00 |     \$0.00 |     \$0.00 |     \$0.00 |       \$0.00 |      \$0.00 |        \$0.00 |
-
-The first two tables summarize total balance, expenses, broken down by type of expenses, for several grants for two different months. These are the totals since the start of the grant. Since we sometimes care about monthly spending, the third table shows the *differences* between months, to indicate for instance, how much money was spent on supplies during July ($2,458.96 spent during July = $8,847.54 total spent by August - $6,388.58 total spent by July).
-
 [AggieEnterprise](https://aggieenterprise.ucdavis.edu/) is a software system used by [UC Davis](https://www.ucdavis.edu/), whose purpose is to take the useful information above and bury it beneath mountains of gibberish, resulting in a spreadsheet with redundant and useless information like this:
 
 ![AggieEnterprise spreadsheet screenshot](images/spreadsheet.png)
@@ -101,7 +79,9 @@ Difference between August and July
 ╰────────────────────────────────────┴────────────┴────────────┴───────────┴────────────┴───────────┴──────────────┴────────────┴──────────────╯
 ```
 
-In the final diff table, one would normal expect each entry under Balance (which represents a change in balance from July to August) to be the negative of the entry under Expenses (total amount of expenses between July and August), as in the project "NSF Engineering DNA and RNA". However, sometimes a grant agency will deposit new funds (as happened in the "NSF CAREER Chemical Computation" entry above), so not always.
+The first two tables summarize total balance, expenses, broken down by type of expenses, for several grants for two different months. These are the totals since the start of the grant. Since we sometimes care about monthly spending, the third table shows the *differences* between months, to indicate for instance, how much money was spent on supplies during July ($2,458.96 spent during July = $8,847.54 total spent by August - $6,388.58 total spent by July).
+
+In the final diff table, one would normal expect each entry under Balance (which represents a change in balance from July to August) to be the negative of the entry under Expenses (total amount of expenses between July and August), as in the project "NSF Engineering DNA and RNA". However, sometimes a grant agency will deposit new funds (as happened in the "NSF CAREER Chemical Computation" entry above), so the chance in balance and change in expenses are not always negatives of each other.
 
 You can also render the tables in Markdown in a Jupyter notebook, so they will appear similar to the first tables shown above:
 

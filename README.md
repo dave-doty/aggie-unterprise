@@ -41,7 +41,7 @@ print("Difference between August and July")
 print(table_diff)
 ```
 
-will print a text table in a format similar this:
+will print text tables in a format similar this:
 
 ```
 Totals for August

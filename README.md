@@ -2,7 +2,7 @@
 
 
 ## Overview
-Here's an example useful summary of grant data:
+Here's an example of a useful summary of grant data:
 
 Totals for August
 | Project Name                       |      Balance |     Expenses |       Salary |      Travel |   Supplies |      Fringe |   Fellowship |     Indirect |       Budget |

@@ -28,7 +28,7 @@ def remove_substrings(string: str, substrings: Iterable[str]) -> str:
     return string
 
 
-def summaries_table(summaries: Iterable[Summary], tablefmt: str = 'rounded_outline') -> str:
+def summary_table(summaries: Iterable[Summary], tablefmt: str = 'rounded_outline') -> str:
     table = []
     for summary in summaries:
         row = [
@@ -58,7 +58,7 @@ def summaries_table(summaries: Iterable[Summary], tablefmt: str = 'rounded_outli
     return table_tabulated
 
 
-def summaries_diff_table(summaries_later: Iterable[Summary], summaries_earlier: Iterable[Summary],
+def summary_diff_table(summaries_later: Iterable[Summary], summaries_earlier: Iterable[Summary],
                          tablefmt: str = 'rounded_outline') -> str:
     table = []
     for (summary_later, summary_earlier) in zip(summaries_later, summaries_earlier):
@@ -159,7 +159,7 @@ class Summary:
         )
 
     @staticmethod
-    def from_file(fn: str) -> list[Summary]:
+    def from_file(fn: str, substrings_to_clean: Iterable[str] = (), suffixes_to_clean: Iterable[str] = ()) -> list[Summary]:
         """
         Read the Excel file named `fn` and return a list of summaries of projects in the file.
         """
@@ -213,33 +213,33 @@ class Summary:
             find_expenses_by_category(summary, ws_detail, project_name_header, project_name)
 
             clean_project_name = project_name
-            if 'COMPUTER SCIENCE PPM Only' in project_name:
+            if 'PPM Only' in project_name:
                 # replace with more specific task name
                 clean_project_name = row[summary_col_idxs[task_header]].value
 
-            clean_project_name = remove_suffix_starting_with(clean_project_name,
-                                                             ['K3023', 'DOTY DEFAULT PROJECT 13U00'])
-            clean_project_name = remove_substrings(clean_project_name, ['Doty', 'CS '])
+
+            clean_project_name = remove_suffix_starting_with(clean_project_name, suffixes_to_clean)
+            clean_project_name = remove_substrings(clean_project_name, substrings_to_clean)
             summary.project_name = clean_project_name
 
             summaries.append(summary)
 
         return summaries
 
-
 if __name__ == '__main__':
-    summaries_aug = Summary.from_file('2024-8-5.xlsx')
-    summaries_jul = Summary.from_file('2024-7-11.xlsx')
-    table_diff = summaries_diff_table(summaries_aug, summaries_jul)
-    print("Difference between August and July")
-    print(table_diff)
-    table_aug = summaries_table(summaries_aug)
-    table_jul = summaries_table(summaries_jul)
+    from aggie_unterprise import Summary, summary_diff_table, summary_table
+
+    suffixes = ['K3023', 'DOTY DEFAULT PROJECT 13U00']
+    substrings = ['Doty', 'CS ']
+    summary_aug = Summary.from_file('2024-8-5.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
+    summary_jul = Summary.from_file('2024-7-11.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
+    table_diff = summary_diff_table(summary_aug, summary_jul)
+    table_aug = summary_table(summary_aug)
+    table_jul = summary_table(summary_jul)
+
     print("Totals for August")
     print(table_aug)
     print("Totals for July")
     print(table_jul)
-
-# table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt,
-#                            colalign=('left', 'right', 'right', 'right'))
-# print(table_tabulated)
+    print("Difference between August and July")
+    print(table_diff)

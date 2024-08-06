@@ -1,7 +1,6 @@
 # aggie-unterprise
 
 
-
 ## Overview
 Here's an example useful summary of grant data:
 
@@ -57,13 +56,13 @@ The aggie_unterprise package helps you, the **Aggie**, to **un**do this en**terp
 Suppose you have generated two spreadsheets from AggieEnterprise from two different months, named `2024-7-1.xlsx` and `2024-8-1.xlsx`. Then the following code will print text tables like the above:
 
 ```python
-from aggie_unterprise import Summary, summaries_diff_table, summaries_table
+from aggie_unterprise import Summary, summary_diff_table, summary_table
 
-summaries_aug = Summary.from_file('2024-8-1.xlsx')
-summaries_jul = Summary.from_file('2024-7-1.xlsx')
-table_diff = summaries_diff_table(summaries_aug, summaries_jul)
-table_aug = summaries_table(summaries_aug)
-table_jul = summaries_table(summaries_jul)
+summary_aug = Summary.from_file('2024-8-1.xlsx')
+summary_jul = Summary.from_file('2024-7-1.xlsx')
+table_diff = summary_diff_table(summary_aug, summary_jul)
+table_aug = summary_table(summary_aug)
+table_jul = summary_table(summary_jul)
 
 print("Totals for August")
 print(table_aug)
@@ -120,16 +119,18 @@ Difference between August and July
 ╰────────────────────────────────────┴────────────┴────────────┴───────────┴────────────┴───────────┴──────────────┴────────────┴──────────────╯
 ```
 
+In the final diff table, one would normal expect each entry under Balance (which represents a change in balance from July to August) to be the negative of the entry under Expenses (total amount of expenses between July and August), as in the project "NSF Engineering DNA and RNA". However, sometimes a grant agency will deposit new funds (as happened in the "NSF CAREER Chemical Computation" entry above), so not always.
+
 You can also render the tables in Markdown in a Jupyter notebook, so they will appear similar to the first tables shown above:
 
 ```python
-from aggie_unterprise import Summary, summaries_diff_table, summaries_table
+from aggie_unterprise import Summary, summary_diff_table, summary_table
 
-summaries_aug = Summary.from_file('2024-8-5.xlsx')
-summaries_jul = Summary.from_file('2024-7-11.xlsx')
-table_diff = summaries_diff_table(summaries_aug, summaries_jul, tablefmt='github')
-table_aug = summaries_table(summaries_aug, tablefmt='github')
-table_jul = summaries_table(summaries_jul, tablefmt='github')
+summary_aug = Summary.from_file('2024-8-5.xlsx')
+summary_jul = Summary.from_file('2024-7-11.xlsx')
+table_diff = summary_diff_table(summary_aug, summary_jul, tablefmt='github')
+table_aug = summary_table(summary_aug, tablefmt='github')
+table_jul = summary_table(summary_jul, tablefmt='github')
 
 from IPython.display import display, Markdown
 print("Difference between August and July")
@@ -139,6 +140,10 @@ display(Markdown(table_aug))
 print("Totals for July")
 display(Markdown(table_jul))
 ```
+
+Finally, you can customize a bit how to clean up project names. They are taken either from the column named "Project Name" in the spreadsheet, unless that name has the substring `"PPM Only"` in it, which generally appear in department-specific funds like startup grants or indirect cost return, and are identical (for the CS department for me, they are all named "David Doty ENGR COMPUTER SCIENCE PPM Only"). For these funds we instead use the column "Task/Subtask Name" (which is useless for normal grants since it just says "TASK01", but is a bit more informative for department-specific funds).
+
+To clean up the project names, you can specify two parameters to the `Summary.from_file` method: `substrings_to_clean` and `suffixes_to_clean`. Any substring appearing in `substrings_to_clean` will be removed, for example if I set `substrings_to_clean=['CS', 'Doty']`, it will change the project name `"CS NSF Engineering DNA and RNA Doty K302325F33"` to `"NSF Engineering DNA and RNA  K302325F33"`. Anything in `suffixes_to_clean` will be removed, not only that substring, but the entire rest of the name. For instance, if I set `suffixes_to_clean=['K3023']`, it will change `"NSF Engineering DNA and RNA  K302325F33"` to `"NSF Engineering DNA and RNA"`.
 
 ## Installation
 I may put this on [PyPI](https://pypi.org/) eventually so that it can be installed via pip. Until then you have to install the hard way:

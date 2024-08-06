@@ -59,8 +59,8 @@ Suppose you have generated two spreadsheets from AggieEnterprise from two differ
 ```python
 from aggie_unterprise import Summary, summaries_diff_table, summaries_table
 
-summaries_aug = Summary.from_file('2024-8-5.xlsx')
-summaries_jul = Summary.from_file('2024-7-11.xlsx')
+summaries_aug = Summary.from_file('2024-8-1.xlsx')
+summaries_jul = Summary.from_file('2024-7-1.xlsx')
 table_diff = summaries_diff_table(summaries_aug, summaries_jul)
 table_aug = summaries_table(summaries_aug)
 table_jul = summaries_table(summaries_jul)

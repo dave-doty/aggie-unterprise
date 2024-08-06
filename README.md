@@ -44,7 +44,7 @@ Difference between August and July
 | NSF Med Flying like an airplane    |      \$0.00 |      \$0.00 |     \$0.00 |     \$0.00 |     \$0.00 |       \$0.00 |      \$0.00 |        \$0.00 |
 | DOE Office of Science Basic Energy |      \$0.00 |      \$0.00 |     \$0.00 |     \$0.00 |     \$0.00 |       \$0.00 |      \$0.00 |        \$0.00 |
 
-The first two tables summarize total balance, expenses, broken down by type of expenses, for several grants for two different months. These are the totals since the start of the grant. Since we sometimes care about monthly spending, the third table shows the *differences* between months, to indicate for instance, how much money was spent on supplies during July ($2,458.96 spent during July = $8,847.54 spent by August - $6,388.58 spent by July).
+The first two tables summarize total balance, expenses, broken down by type of expenses, for several grants for two different months. These are the totals since the start of the grant. Since we sometimes care about monthly spending, the third table shows the *differences* between months, to indicate for instance, how much money was spent on supplies during July ($2,458.96 spent during July = $8,847.54 total spent by August - $6,388.58 total spent by July).
 
 AggieEnterprise is a software system used by UC Davis that starts with the useful information above, and then tasks itself with adding loads of noise to it, resulting in a spreadsheet with redundant and useless information like this:
 

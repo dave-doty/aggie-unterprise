@@ -22,7 +22,7 @@ The aggie_unterprise package helps you, the **Aggie**, to **un**do this en**terp
 
 
 ## Example of usage
-Suppose you have generated two spreadsheets from AggieEnterprise from two different months, named `2024-7-1.xlsx` and `2024-8-1.xlsx`. Then the following code will print text tables like the above:
+Suppose you have generated two spreadsheets from AggieEnterprise from two different months, named `2024-7-1.xlsx` and `2024-8-1.xlsx`. Then the following code:
 
 ```python
 from aggie_unterprise import Summary, summary_diff_table, summary_table
@@ -41,7 +41,7 @@ print("Difference between August and July")
 print(table_diff)
 ```
 
-This will print a text table in a format similar this:
+will print a text table in a format similar this:
 
 ```
 Totals for August

@@ -83,7 +83,7 @@ The first two tables summarize total balance, expenses, broken down by type of e
 
 In the final diff table, one would normal expect each entry under Balance (which represents a change in balance from July to August) to be the negative of the entry under Expenses (total amount of expenses between July and August), as in the project "NSF Engineering DNA and RNA". However, sometimes a grant agency will deposit new funds (as happened in the "NSF CAREER Chemical Computation" entry above), so the chance in balance and change in expenses are not always negatives of each other.
 
-You can also render the tables in Markdown in a Jupyter notebook, so they will appear similar to the first tables shown above:
+You can also render the tables in Markdown in a Jupyter notebook, so they will appear similar to the first table shown at the top of this document:
 
 ```python
 from aggie_unterprise import Summary, summary_diff_table, summary_table

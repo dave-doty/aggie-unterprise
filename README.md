@@ -54,7 +54,7 @@ The aggie_unterprise package helps you, the **Aggie**, to **un**do this en**terp
 
 
 ## Example of usage
-Suppose you have generated two spreadsheets from AggieEnterprise from two different months, named `2024-7-1.xlsx` for July and `2024-8-1.xlsx` for August. Then the following code will print text tables like the above:
+Suppose you have generated two spreadsheets from AggieEnterprise from two different months, named `2024-7-1.xlsx` and `2024-8-1.xlsx`. Then the following code will print text tables like the above:
 
 ```python
 from aggie_unterprise import Summary, summaries_diff_table, summaries_table

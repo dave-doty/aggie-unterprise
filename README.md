@@ -138,4 +138,6 @@ and editing or adding (if necessary) a variable named PYTHONPATH with value `C:\
 ![](images/env-var-set.png)\
 In Linux/Mac, using the bash shell, this can be done by adding the line `PYTHONPATH=$PYTHONPATH:/mnt/c/git/aggie-enterprise`.
 
-3. **Test**: Open a Python interpreter or Jupyter notebook and type `import aggie_unterprise`; it should import without errors.
+3. **Install dependencies**: Type `pip install openpyxl tabulate` at the command line.
+
+4. **Test**: Open a Python interpreter or Jupyter notebook and type `import aggie_unterprise`; it should import without errors.

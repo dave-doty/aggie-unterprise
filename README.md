@@ -115,12 +115,12 @@ table_aug = summary_table(summary_aug, tablefmt='github')
 table_jul = summary_table(summary_jul, tablefmt='github')
 
 from IPython.display import display, Markdown
-print("Difference between August and July")
-display(Markdown(table_diff))
 print("Totals for August")
 display(Markdown(table_aug))
 print("Totals for July")
 display(Markdown(table_jul))
+print("Difference between August and July")
+display(Markdown(table_diff))
 ```
 
 Finally, you can customize a bit how to clean up project names. They are taken either from the column named "Project Name" in the spreadsheet, unless that name has the substring `"PPM Only"` in it, which generally appear in department-specific funds like startup grants or indirect cost return, and are identical (for the CS department for me, they are all named "David Doty ENGR COMPUTER SCIENCE PPM Only"). For these funds we instead use the column "Task/Subtask Name" (which is useless for normal grants since it just says "TASK01", but is a bit more informative for department-specific funds).

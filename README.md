@@ -49,7 +49,7 @@ Totals for August
 
 The table summarizes total balance, expenses, broken down by type of expenses, for several grants for two different months. These are the totals since the start of the grant. 
 
-Since we sometimes care about monthly spending, we may want to know the *differences* between months, to indicate for instance, how much money was spent on supplies during July (e.g., $200 spent during July = $800 total spent by August - $600 total spent by July). The method diff_table gives this information:
+Since we sometimes care about monthly spending, we may want to know the *differences* between months, to indicate for instance, how much money was spent on supplies during July (e.g., $800 total spent by August - $600 total spent by July = $200 spent *during* July). The method diff_table gives this information:
 
 ```python
 from aggie_unterprise import Summary

@@ -106,14 +106,14 @@ due to the particular manner in which someone mashed their forearm against the k
 ## Installation
 I may put this on [PyPI](https://pypi.org/) eventually so that it can be installed via pip. Until then you have to install the hard way:
 
-1. **Clone the repo**: `git clone https://github.com/dave-doty/aggie-unterprise.git`
+1. **Install dependencies**: Type `pip install openpyxl tabulate` at the command line.
 
-2. **Add to PYTHONPATH**: Assuming for example that you cloned the repository to the directory `C:\git\aggie-enterprise`, add the directory to your PYTHONPATH. In Windows this is done by going to settings and searching for "Environment Variables":\
+2. **Clone the repo**: `git clone https://github.com/dave-doty/aggie-unterprise.git`
+
+3. **Add to PYTHONPATH**: Assuming for example that you cloned the repository to the directory `C:\git\aggie-enterprise`, add the directory to your PYTHONPATH. In Windows this is done by going to settings and searching for "Environment Variables":\
 ![](images/env-var-search.png)\
 and editing or adding (if necessary) a variable named PYTHONPATH with value `C:\git\aggie-enterprise`:\
 ![](images/env-var-set.png)\
 In Linux/Mac, using the bash shell, this can be done by adding the line `PYTHONPATH=$PYTHONPATH:/mnt/c/git/aggie-enterprise` to the file `.bashrc` in your home directory.
-
-3. **Install dependencies**: Type `pip install openpyxl tabulate` at the command line.
 
 4. **Test**: Open a Python interpreter or Jupyter notebook and type `import aggie_unterprise`; it should import without errors.

@@ -10,6 +10,8 @@ locale.setlocale(locale.LC_ALL, '')
 summary_header_row_idx = 17
 detail_header_row_idx = 17
 
+MARKDOWN_TABLE_FORMATS = ['github', 'pipe']
+
 
 def remove_suffix_starting_with(string: str, substrings: Iterable[str]) -> str:
     for substring in substrings:
@@ -158,7 +160,7 @@ class Summary:
                 locale.currency(project_summary.balance, grouping=True),
                 locale.currency(project_summary.budget, grouping=True),
             ]
-            if tablefmt == 'github':
+            if tablefmt in MARKDOWN_TABLE_FORMATS:
                 # escape $ so markdown does not interpret it as Latex
                 for i in range(1, len(row)):
                     row[i] = row[i].replace('$', r'\$')
@@ -189,7 +191,7 @@ class Summary:
                 locale.currency(diff.indirect, grouping=True),
                 locale.currency(diff.balance, grouping=True),
             ]
-            if tablefmt == 'github':
+            if tablefmt in MARKDOWN_TABLE_FORMATS:
                 # escape $ so markdown does not interpret it as Latex
                 for i in range(1, len(row)):
                     row[i] = row[i].replace('$', r'\$')

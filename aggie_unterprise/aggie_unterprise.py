@@ -1,7 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
-
 from openpyxl import load_workbook
 from tabulate import tabulate
 import locale
@@ -28,69 +27,7 @@ def remove_substrings(string: str, substrings: Iterable[str]) -> str:
     return string
 
 
-def summary_table(summaries: Iterable[Summary], tablefmt: str = 'rounded_outline') -> str:
-    table = []
-    for summary in summaries:
-        row = [
-            summary.project_name,
-            locale.currency(summary.expenses, grouping=True),
-            locale.currency(summary.salary, grouping=True),
-            locale.currency(summary.travel, grouping=True),
-            locale.currency(summary.supplies, grouping=True),
-            locale.currency(summary.fringe, grouping=True),
-            locale.currency(summary.fellowship, grouping=True),
-            locale.currency(summary.indirect, grouping=True),
-            locale.currency(summary.balance, grouping=True),
-            locale.currency(summary.budget, grouping=True),
-        ]
-        if tablefmt == 'github':
-            # escape $ so markdown does not interpret it as Latex
-            for i in range(1, len(row)):
-                row[i] = row[i].replace('$', r'\$')
-        table.append(row)
-
-    new_headers = ['Project Name', 'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe',
-                   'Fellowship', 'Indirect', 'Balance', 'Budget']
-    table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt,
-                               colalign=(
-                                   'left', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right',
-                                   'right'))
-    return table_tabulated
-
-
-def summary_diff_table(summaries_later: Iterable[Summary], summaries_earlier: Iterable[Summary],
-                         tablefmt: str = 'rounded_outline') -> str:
-    table = []
-    for (summary_later, summary_earlier) in zip(summaries_later, summaries_earlier):
-        if summary_later.project_name != summary_earlier.project_name:
-            raise ValueError("Can't diff summaries with different project names")
-        diff = summary_later.diff(summary_earlier)
-        row = [
-            diff.project_name,
-            locale.currency(diff.expenses, grouping=True),
-            locale.currency(diff.salary, grouping=True),
-            locale.currency(diff.travel, grouping=True),
-            locale.currency(diff.supplies, grouping=True),
-            locale.currency(diff.fringe, grouping=True),
-            locale.currency(diff.fellowship, grouping=True),
-            locale.currency(diff.indirect, grouping=True),
-            locale.currency(diff.balance, grouping=True),
-        ]
-        if tablefmt == 'github':
-            # escape $ so markdown does not interpret it as Latex
-            for i in range(1, len(row)):
-                row[i] = row[i].replace('$', r'\$')
-        table.append(row)
-
-    new_headers = ['Project Name', 'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe',
-                   'Fellowship', 'Indirect', 'Balance']
-    table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt,
-                               colalign=(
-                                   'left', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right'))
-    return table_tabulated
-
-
-def find_expenses_by_category(summary: Summary, ws_detail, project_name_header: str, project_name: str) -> None:
+def find_expenses_by_category(summary: ProjectSummary, ws_detail, project_name_header: str, project_name: str) -> None:
     detail_expense_category_header = 'Expenditure Category Name'
     detail_expenses_header = 'Expenses'
     detail_budget_header = 'Budget'
@@ -131,35 +68,10 @@ def find_expenses_by_category(summary: Summary, ws_detail, project_name_header: 
 
 @dataclass
 class Summary:
-    project_name: str
-    balance: float
-    budget: float
-    expenses: float
-    salary: float
-    travel: float
-    supplies: float
-    fringe: float
-    fellowship: float
-    indirect: float
-
-    def diff(self, other: Summary) -> Summary:
-        if self.project_name != other.project_name:
-            raise ValueError("Can't diff summaries with different project names")
-        return Summary(
-            project_name=self.project_name,
-            balance=self.balance - other.balance,
-            budget=0,
-            expenses=self.expenses - other.expenses,
-            salary=self.salary - other.salary,
-            travel=self.travel - other.travel,
-            supplies=self.supplies - other.supplies,
-            fringe=self.fringe - other.fringe,
-            fellowship=self.fellowship - other.fellowship,
-            indirect=self.indirect - other.indirect,
-        )
+    project_summaries: list[ProjectSummary]
 
     @staticmethod
-    def from_file(fn: str, substrings_to_clean: Iterable[str] = (), suffixes_to_clean: Iterable[str] = ()) -> list[Summary]:
+    def from_file(fn: str, substrings_to_clean: Iterable[str] = (), suffixes_to_clean: Iterable[str] = ()) -> Summary:
         """
         Read the Excel file named `fn` and return a list of summaries of projects in the file.
         """
@@ -185,7 +97,7 @@ class Summary:
             if header in col_names + [task_header]:
                 summary_col_idxs[header] = i
 
-        summaries = []
+        project_summaries = []
         for row in ws_summary.iter_rows(min_row=summary_header_row_idx + 1):
             project_name = row[summary_col_idxs[project_name_header]].value
             budget = row[summary_col_idxs[budget_header]].value
@@ -198,7 +110,7 @@ class Summary:
             budget = float(budget)
             expenses = float(expenses)
             balance = float(balance)
-            summary = Summary(
+            summary = ProjectSummary(
                 project_name=project_name,
                 balance=balance,
                 budget=budget,
@@ -217,29 +129,113 @@ class Summary:
                 # replace with more specific task name
                 clean_project_name = row[summary_col_idxs[task_header]].value
 
-
             clean_project_name = remove_suffix_starting_with(clean_project_name, suffixes_to_clean)
             clean_project_name = remove_substrings(clean_project_name, substrings_to_clean)
             summary.project_name = clean_project_name
 
-            summaries.append(summary)
+            project_summaries.append(summary)
 
-        return summaries
+        return Summary(project_summaries)
+
+    def table(self, tablefmt: str = 'rounded_outline') -> str:
+        table = []
+        for project_summary in self.project_summaries:
+            row = [
+                project_summary.project_name,
+                locale.currency(project_summary.expenses, grouping=True),
+                locale.currency(project_summary.salary, grouping=True),
+                locale.currency(project_summary.travel, grouping=True),
+                locale.currency(project_summary.supplies, grouping=True),
+                locale.currency(project_summary.fringe, grouping=True),
+                locale.currency(project_summary.fellowship, grouping=True),
+                locale.currency(project_summary.indirect, grouping=True),
+                locale.currency(project_summary.balance, grouping=True),
+                locale.currency(project_summary.budget, grouping=True),
+            ]
+            if tablefmt == 'github':
+                # escape $ so markdown does not interpret it as Latex
+                for i in range(1, len(row)):
+                    row[i] = row[i].replace('$', r'\$')
+            table.append(row)
+
+        new_headers = ['Project Name', 'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe',
+                       'Fellowship', 'Indirect', 'Balance', 'Budget']
+        table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt,
+                                   colalign=(
+                                       'left', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right',
+                                       'right'))
+        return table_tabulated
+
+    def diff_table(self, summary_earlier: Summary, tablefmt: str = 'rounded_outline') -> str:
+        table = []
+        for (summary_later, summary_earlier) in zip(self.project_summaries, summary_earlier.project_summaries):
+            if summary_later.project_name != summary_earlier.project_name:
+                raise ValueError("Can't diff summaries with different project names")
+            diff = summary_later.diff(summary_earlier)
+            row = [
+                diff.project_name,
+                locale.currency(diff.expenses, grouping=True),
+                locale.currency(diff.salary, grouping=True),
+                locale.currency(diff.travel, grouping=True),
+                locale.currency(diff.supplies, grouping=True),
+                locale.currency(diff.fringe, grouping=True),
+                locale.currency(diff.fellowship, grouping=True),
+                locale.currency(diff.indirect, grouping=True),
+                locale.currency(diff.balance, grouping=True),
+            ]
+            if tablefmt == 'github':
+                # escape $ so markdown does not interpret it as Latex
+                for i in range(1, len(row)):
+                    row[i] = row[i].replace('$', r'\$')
+            table.append(row)
+
+        new_headers = ['Project Name', 'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe',
+                       'Fellowship', 'Indirect', 'Balance']
+        table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt,
+                                   colalign=(
+                                       'left', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right'))
+        return table_tabulated
+
+
+@dataclass
+class ProjectSummary:
+    project_name: str
+    balance: float
+    budget: float
+    expenses: float
+    salary: float
+    travel: float
+    supplies: float
+    fringe: float
+    fellowship: float
+    indirect: float
+
+    def diff(self, other: ProjectSummary) -> ProjectSummary:
+        if self.project_name != other.project_name:
+            raise ValueError("Can't diff summaries with different project names")
+        return ProjectSummary(
+            project_name=self.project_name,
+            balance=self.balance - other.balance,
+            budget=0,
+            expenses=self.expenses - other.expenses,
+            salary=self.salary - other.salary,
+            travel=self.travel - other.travel,
+            supplies=self.supplies - other.supplies,
+            fringe=self.fringe - other.fringe,
+            fellowship=self.fellowship - other.fellowship,
+            indirect=self.indirect - other.indirect,
+        )
+
 
 if __name__ == '__main__':
-    from aggie_unterprise import Summary, summary_diff_table, summary_table
-
     suffixes = ['K3023', 'DOTY DEFAULT PROJECT 13U00']
     substrings = ['Doty', 'CS ']
     summary_aug = Summary.from_file('2024-8-5.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
     summary_jul = Summary.from_file('2024-7-11.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
-    table_diff = summary_diff_table(summary_aug, summary_jul)
-    table_aug = summary_table(summary_aug)
-    table_jul = summary_table(summary_jul)
-
+    
     print("Totals for August")
-    print(table_aug)
+    print(summary_aug.table())
     print("Totals for July")
-    print(table_jul)
+    print(summary_jul.table())
     print("Difference between August and July")
-    print(table_diff)
+    print(summary_aug.diff_table(summary_jul))

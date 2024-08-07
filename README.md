@@ -24,21 +24,18 @@ The aggie_unterprise Python package helps you, the **AGGIE**, to **UN**do this e
 Suppose you have generated two spreadsheets from AggieEnterprise from two different months, named `2024-7-1.xlsx` and `2024-8-1.xlsx`. Then the following code:
 
 ```python
-from aggie_unterprise import Summary, summary_diff_table, summary_table
+from aggie_unterprise import Summary
 
 summary_aug = Summary.from_file('2024-8-1.xlsx')
 summary_jul = Summary.from_file('2024-7-1.xlsx')
-table_aug = summary_table(summary_aug)
-table_jul = summary_table(summary_jul)
-table_diff = summary_diff_table(summary_aug, summary_jul)
 
 print(f"""\
 Totals for August
-{table_aug}
+{summary_aug.table()}
 Totals for July
-{table_jul}
+{summary_jul.table()}
 Difference between August and July
-{table_diff}
+{summary_aug.diff_table(summary_jul)}
 """)
 ```
 
@@ -91,18 +88,15 @@ from aggie_unterprise import Summary, summary_diff_table, summary_table
 
 summary_aug = Summary.from_file('2024-8-5.xlsx')
 summary_jul = Summary.from_file('2024-7-11.xlsx')
-table_aug = summary_table(summary_aug, tablefmt='github')
-table_jul = summary_table(summary_jul, tablefmt='github')
-table_diff = summary_diff_table(summary_aug, summary_jul, tablefmt='github')
 
 from IPython.display import display, Markdown
 display(Markdown(f"""\
 ### Totals for August
-{table_aug}
+{summary_aug.table(tablefmt='github')}
 ### Totals for July
-{table_jul}
+{summary_jul.table(tablefmt='github')}
 ### Difference between August and July
-{table_diff}
+{summary_aug.diff_table(summary_jul, tablefmt='github')}
 """))
 ```
 

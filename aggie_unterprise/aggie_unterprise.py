@@ -33,7 +33,6 @@ def summary_table(summaries: Iterable[Summary], tablefmt: str = 'rounded_outline
     for summary in summaries:
         row = [
             summary.project_name,
-            locale.currency(summary.balance, grouping=True),
             locale.currency(summary.expenses, grouping=True),
             locale.currency(summary.salary, grouping=True),
             locale.currency(summary.travel, grouping=True),
@@ -41,6 +40,7 @@ def summary_table(summaries: Iterable[Summary], tablefmt: str = 'rounded_outline
             locale.currency(summary.fringe, grouping=True),
             locale.currency(summary.fellowship, grouping=True),
             locale.currency(summary.indirect, grouping=True),
+            locale.currency(summary.balance, grouping=True),
             locale.currency(summary.budget, grouping=True),
         ]
         if tablefmt == 'github':
@@ -49,8 +49,8 @@ def summary_table(summaries: Iterable[Summary], tablefmt: str = 'rounded_outline
                 row[i] = row[i].replace('$', r'\$')
         table.append(row)
 
-    new_headers = ['Project Name', 'Balance', 'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe',
-                   'Fellowship', 'Indirect', 'Budget']
+    new_headers = ['Project Name', 'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe',
+                   'Fellowship', 'Indirect', 'Balance', 'Budget']
     table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt,
                                colalign=(
                                    'left', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right',

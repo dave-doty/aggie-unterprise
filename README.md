@@ -1,7 +1,7 @@
 # aggie-unterprise
 
 ## Overview
-Here's an example of a useful summary of data about research grant funds:
+This is an example of a useful summary of research grant funds:
 
 ### Totals for August
 | Project Name                       |     Expenses |       Salary |      Travel |   Supplies |      Fringe |   Fellowship |     Indirect |      Balance |       Budget |

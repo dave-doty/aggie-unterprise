@@ -27,19 +27,11 @@ Suppose you have generated two spreadsheets from AggieEnterprise from two differ
 from aggie_unterprise import Summary
 
 summary_aug = Summary.from_file('2024-8-1.xlsx')
-summary_jul = Summary.from_file('2024-7-1.xlsx')
 
-print(f"""\
-Totals for August
-{summary_aug.table()}
-Totals for July
-{summary_jul.table()}
-Difference between August and July
-{summary_aug.diff_table(summary_jul)}
-""")
+print(f"Totals for August\n{summary_aug.table()}")
 ```
 
-will print text tables in a format similar this:
+will print a text table in a format similar this:
 
 ```
 Totals for August
@@ -53,17 +45,25 @@ Totals for August
 │ REU CAREER Chemical Computation    │  $44,062.63 │  $43,180.29 │      $0.00 │      $0.00 │    $882.34 │        $0.00 │       $0.00 │  $18,750.37 │  $62,813.00 │
 │ DOE Office of Science Basic Energy │  $15,045.49 │   $8,642.86 │      $0.00 │      $0.00 │    $760.57 │        $0.00 │   $5,642.06 │  $51,372.51 │  $66,418.00 │
 ╰────────────────────────────────────┴─────────────┴─────────────┴────────────┴────────────┴────────────┴──────────────┴─────────────┴─────────────┴─────────────╯
-Totals for July
-╭────────────────────────────────────┬─────────────┬─────────────┬────────────┬────────────┬────────────┬──────────────┬─────────────┬──────────────┬─────────────╮
-│ Project Name                       │    Expenses │      Salary │     Travel │   Supplies │     Fringe │   Fellowship │    Indirect │      Balance │      Budget │
-├────────────────────────────────────┼─────────────┼─────────────┼────────────┼────────────┼────────────┼──────────────┼─────────────┼──────────────┼─────────────┤
-│ INDIRECT COST RETURN               │       $0.00 │       $0.00 │      $0.00 │      $0.00 │      $0.00 │        $0.00 │       $0.00 │      $904.00 │     $904.00 │
-│ DISCRETIONARY FUNDS                │       $0.00 │       $0.00 │      $0.00 │      $0.00 │      $0.00 │        $0.00 │       $0.00 │    $2,500.00 │   $2,500.00 │
-│ NSF Engineering DNA and RNA        │  $28,915.20 │  $16,500.00 │      $0.00 │    $120.00 │  $1,452.00 │        $0.00 │  $10,843.20 │  $351,084.80 │ $380,000.00 │
-│ NSF CAREER Chemical Computation    │ $453,652.85 │ $206,470.48 │ $29,829.98 │  $6,388.58 │ $58,419.11 │    $8,993.12 │ $143,551.58 │ ($44,997.85) │ $408,655.00 │
-│ REU CAREER Chemical Computation    │  $44,062.63 │  $43,180.29 │      $0.00 │      $0.00 │    $882.34 │        $0.00 │       $0.00 │   $18,750.37 │  $62,813.00 │
-│ DOE Office of Science Basic Energy │  $15,045.49 │   $8,642.86 │      $0.00 │      $0.00 │    $760.57 │        $0.00 │   $5,642.06 │   $51,372.51 │  $66,418.00 │
-╰────────────────────────────────────┴─────────────┴─────────────┴────────────┴────────────┴────────────┴──────────────┴─────────────┴──────────────┴─────────────╯
+```
+
+The table summarizes total balance, expenses, broken down by type of expenses, for several grants for two different months. These are the totals since the start of the grant. 
+
+Since we sometimes care about monthly spending, we may want to know the *differences* between months, to indicate for instance, how much money was spent on supplies during July ($2,458.96 spent during July = $8,847.54 total spent by August - $6,388.58 total spent by July). The method diff_table gives this information:
+
+```python
+from aggie_unterprise import Summary
+
+summary_aug = Summary.from_file('2024-8-1.xlsx')
+summary_jul = Summary.from_file('2024-7-1.xlsx')
+
+print(f"""\
+Difference between August and July
+{summary_aug.diff_table(summary_jul)}
+""")
+```
+
+```
 Difference between August and July
 ╭────────────────────────────────────┬────────────┬────────────┬───────────┬────────────┬───────────┬──────────────┬────────────┬──────────────╮
 │ Project Name                       │   Expenses │     Salary │    Travel │   Supplies │    Fringe │   Fellowship │   Indirect │      Balance │
@@ -77,9 +77,7 @@ Difference between August and July
 ╰────────────────────────────────────┴────────────┴────────────┴───────────┴────────────┴───────────┴──────────────┴────────────┴──────────────╯
 ```
 
-The first two tables summarize total balance, expenses, broken down by type of expenses, for several grants for two different months. These are the totals since the start of the grant. Since we sometimes care about monthly spending, the third table shows the *differences* between months, to indicate for instance, how much money was spent on supplies during July ($2,458.96 spent during July = $8,847.54 total spent by August - $6,388.58 total spent by July).
-
-In the final diff table, one would normal expect each entry under Balance (which represents a change in balance from July to August) to be the negative of the entry under Expenses (total amount of expenses between July and August), as in the project "NSF Engineering DNA and RNA". However, sometimes a grant agency will deposit new funds (as happened in the "NSF CAREER Chemical Computation" entry above), so the chance in balance and change in expenses are not always negatives of each other.
+In the diff table, one would normal expect each entry under Balance (which represents a change in balance from July to August) to be the negative of the entry under Expenses (total amount of expenses between July and August), as in the project "NSF Engineering DNA and RNA". However, sometimes a grant agency will deposit new funds (as happened in the "NSF CAREER Chemical Computation" entry above), so the chance in balance and change in expenses are not always negatives of each other.
 
 You can also render the tables in Markdown in a Jupyter notebook, so they will appear similar to the first table shown at the top of this document:
 

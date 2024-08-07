@@ -72,7 +72,7 @@ Difference between August and July
 
 In the diff table, one would normal expect each entry under Balance (which represents a change in balance from July to August) to be the negative of the entry under Expenses (total amount of expenses between July and August), as in the project "NSF Engineering DNA and RNA". However, sometimes a grant agency will deposit new funds in between the dates (as happened in the "NSF CAREER Chemical Computation" entry above), so the change in balance and change in expenses are not always negatives of each other.
 
-You can also render the tables in Markdown in a Jupyter notebook, so they will appear similar to the first table shown at the top of this document. When you print a `Summary`, it calls a method called `table`, which (similarly to `diff_table`) can take the `tablefmt` parameter with value `'github'` to render the table appropriately for Markdown (`'github'` means ["GitHub-flavored Markdown"](https://github.github.com/gfm/), which Jupyter can render nicely):
+You can also render the tables in Markdown in a Jupyter notebook, so they will appear similar to the first table shown at the top of this document. When you print/stringify a `Summary`, it calls a method called `table` (so `f'{summary}'` is equivalent to `f'{summary.table()}'`), which (similarly to `diff_table`) can take the `tablefmt` parameter with value `'github'` to render the table appropriately for Markdown (`'github'` means ["GitHub-flavored Markdown"](https://github.github.com/gfm/), which Jupyter can render nicely):
 
 ```python
 from aggie_unterprise import Summary, summary_diff_table, summary_table

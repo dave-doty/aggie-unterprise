@@ -137,6 +137,12 @@ class Summary:
 
         return Summary(project_summaries)
 
+    def __str__(self) -> str:
+        return self.table()
+
+    def __repr__(self) -> str:
+        return self.table()
+
     def table(self, tablefmt: str = 'rounded_outline') -> str:
         table = []
         for project_summary in self.project_summaries:
@@ -232,7 +238,7 @@ if __name__ == '__main__':
     substrings = ['Doty', 'CS ']
     summary_aug = Summary.from_file('2024-8-5.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
     summary_jul = Summary.from_file('2024-7-11.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
-    
+
     print("Totals for August")
     print(summary_aug.table())
     print("Totals for July")

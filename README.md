@@ -29,7 +29,7 @@ summary = Summary.from_file('2024-8-1.xlsx')
 print(f"Totals for August\n{summary}")
 ```
 
-will print a text table in a format similar this:
+will print something like this:
 
 ```
 Totals for August

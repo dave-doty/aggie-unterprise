@@ -21,7 +21,7 @@ The aggie_unterprise Python package helps you, the **AGGIE**, to **UN**do this e
 
 
 ## Example of usage
-Suppose you have generated a spreadsheet from AggieEnterprise named `2024-8-1.xlsx`. The following code:
+Suppose you have generated a spreadsheet from AggieEnterprise named `2024-8-1.xlsx` following [these instructions](https://servicehub.ucdavis.edu/servicehub?id=ucd_kb_article&sys_id=cc1942f61b32c6d80e0b2068b04bcbbf). The following code:
 
 ```python
 from aggie_unterprise import Summary

@@ -14,11 +14,11 @@ Totals for August
 | REU CAREER Chemical Computation    |  \$18,750.37 |  \$44,062.63 |  \$43,180.29 |      \$0.00 |     \$0.00 |    \$882.34 |       \$0.00 |       \$0.00 |  \$62,813.00 |
 | DOE Office of Science Basic Energy |  \$51,372.51 |  \$15,045.49 |   \$8,642.86 |      \$0.00 |     \$0.00 |    \$760.57 |       \$0.00 |   \$5,642.06 |  \$66,418.00 |
 
-[AggieEnterprise](https://aggieenterprise.ucdavis.edu/) is a software system used by [UC Davis](https://www.ucdavis.edu/), whose purpose is to take the useful information above and bury it beneath mountains of gibberish, resulting in a spreadsheet with redundant and useless information like this:
+[AggieEnterprise](https://aggieenterprise.ucdavis.edu/) is a software system used by [UC Davis](https://www.ucdavis.edu/), whose purpose is bury this useful information beneath mountains of gibberish, resulting in a spreadsheet with redundant, useless entries like this:
 
 ![AggieEnterprise spreadsheet screenshot](images/spreadsheet.png)
 
-The aggie_unterprise package helps you, the **Aggie**, to **un**do this en**terprising** effort and view only the important data related to your grants.
+The aggie_unterprise package helps you, the **AGGIE**, to **UN**do this en**TERPRIS**ing effort and view only the important data related to your grants.
 
 
 ## Example of usage

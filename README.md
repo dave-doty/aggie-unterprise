@@ -32,12 +32,14 @@ table_diff = summary_diff_table(summary_aug, summary_jul)
 table_aug = summary_table(summary_aug)
 table_jul = summary_table(summary_jul)
 
-print("Totals for August")
-print(table_aug)
-print("Totals for July")
-print(table_jul)
-print("Difference between August and July")
-print(table_diff)
+print(f"""\
+Totals for August
+{table_aug}
+Totals for July
+{table_jul}
+Difference between August and July
+{table_diff}
+""")
 ```
 
 will print text tables in a format similar this:

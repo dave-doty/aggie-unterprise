@@ -110,7 +110,7 @@ suffixes = ['K3023', 'DOTY DEFAULT PROJECT 13U00']
 substrings = ['Doty', 'CS ']
 summary_aug = Summary.from_file('2024-8-1.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
 ```
-due to the particular manner in which someone mashed their palm against the keyboard to generate my project names, but you will want to customize according to your own project names.
+due to the particular manner in which someone mashed their forearm against the keyboard to generate alien-looking project names for my own grants, but you will want to customize according to the shape of your SPO representative's forearm.
 
 ## Installation
 I may put this on [PyPI](https://pypi.org/) eventually so that it can be installed via pip. Until then you have to install the hard way:

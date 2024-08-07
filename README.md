@@ -45,7 +45,7 @@ Totals for August
 ╰────────────────────────────────────┴─────────────┴─────────────┴────────────┴────────────┴────────────┴──────────────┴─────────────┴─────────────┴─────────────╯
 ```
 
-The table summarizes expenses, broken down by type of expenses, remaining balance, and original total budget, for the grant. These are the totals since the start of the grant. 
+The table summarizes expenses, broken down by type of expenses, remaining balance, and original total budget, for each grant. These are the totals since the start of each grant. 
 
 Since we sometimes care about monthly spending, we may want to know the *differences* between months, to indicate for instance, how much money was spent during July (e.g., $800 total spent by August - $600 total spent by July = $200 spent *during* July). The method `diff_table` gives this information:
 

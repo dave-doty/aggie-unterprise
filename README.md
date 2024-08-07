@@ -57,10 +57,7 @@ from aggie_unterprise import Summary
 summary_aug = Summary.from_file('2024-8-1.xlsx')
 summary_jul = Summary.from_file('2024-7-1.xlsx')
 
-print(f"""\
-Difference between August and July
-{summary_aug.diff_table(summary_jul)}
-""")
+print(f"Difference between August and July\n{summary_aug.diff_table(summary_jul)}")
 ```
 
 ```

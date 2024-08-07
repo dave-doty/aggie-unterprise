@@ -28,9 +28,9 @@ from aggie_unterprise import Summary, summary_diff_table, summary_table
 
 summary_aug = Summary.from_file('2024-8-1.xlsx')
 summary_jul = Summary.from_file('2024-7-1.xlsx')
-table_diff = summary_diff_table(summary_aug, summary_jul)
 table_aug = summary_table(summary_aug)
 table_jul = summary_table(summary_jul)
+table_diff = summary_diff_table(summary_aug, summary_jul)
 
 print(f"""\
 Totals for August
@@ -91,9 +91,9 @@ from aggie_unterprise import Summary, summary_diff_table, summary_table
 
 summary_aug = Summary.from_file('2024-8-5.xlsx')
 summary_jul = Summary.from_file('2024-7-11.xlsx')
-table_diff = summary_diff_table(summary_aug, summary_jul, tablefmt='github')
 table_aug = summary_table(summary_aug, tablefmt='github')
 table_jul = summary_table(summary_jul, tablefmt='github')
+table_diff = summary_diff_table(summary_aug, summary_jul, tablefmt='github')
 
 from IPython.display import display, Markdown
 display(Markdown(f"""\

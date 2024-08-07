@@ -25,8 +25,8 @@ Suppose you have generated a spreadsheet from AggieEnterprise named `2024-8-1.xl
 
 ```python
 from aggie_unterprise import Summary
-summary_aug = Summary.from_file('2024-8-1.xlsx')
-print(f"Totals for August\n{summary_aug}")
+summary = Summary.from_file('2024-8-1.xlsx')
+print(f"Totals for August\n{summary}")
 ```
 
 will print a text table in a format similar this:

@@ -7,8 +7,12 @@ import locale
 
 locale.setlocale(locale.LC_ALL, '')
 
+#TODO: don't hardcode header rows; search for them instead
+
 summary_header_row_idx = 17
 detail_header_row_idx = 17
+
+#TODO: look up date report was generated and store in summary (cell A3 in my reports)
 
 MARKDOWN_TABLE_FORMATS = ['github', 'pipe']
 

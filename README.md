@@ -17,7 +17,7 @@ This is an example of a useful summary of research grant funds:
 
 ![AggieEnterprise spreadsheet screenshot](images/spreadsheet.png)
 
-The aggie_unterprise Python package helps you, the **AGGIE**, to **UN**do this en**TERPRIS**ing feat and view only the important data related to your grants.
+The aggie_unterprise Python package helps you, the **AGGIE**, to **UN**do this en**TERPRIS**ing feat. It sifts through the trash to find the important data related to your grants.
 
 
 ## Example of usage

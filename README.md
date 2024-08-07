@@ -4,7 +4,7 @@
 ## Overview
 Here's an example of a useful summary of grant data:
 
-Totals for August
+### Totals for August
 | Project Name                       |      Balance |     Expenses |       Salary |      Travel |   Supplies |      Fringe |   Fellowship |     Indirect |       Budget |
 |------------------------------------|--------------|--------------|--------------|-------------|------------|-------------|--------------|--------------|--------------|
 | INDIRECT COST RETURN               |     \$904.00 |       \$0.00 |       \$0.00 |      \$0.00 |     \$0.00 |      \$0.00 |       \$0.00 |       \$0.00 |     \$904.00 |

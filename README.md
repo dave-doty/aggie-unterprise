@@ -104,6 +104,14 @@ Finally, you can customize a bit how to clean up project names. They are taken e
 
 To clean up the project names, you can specify two parameters to the `Summary.from_file` method: `substrings_to_clean` and `suffixes_to_clean`. Any substring appearing in `substrings_to_clean` will be removed, for example if I set `substrings_to_clean=['CS', 'Doty']`, it will change the project name `"CS NSF Engineering DNA and RNA Doty K302325F33"` to `"NSF Engineering DNA and RNA  K302325F33"`. Anything in `suffixes_to_clean` will be removed, not only that substring, but the entire rest of the name. For instance, if I set `suffixes_to_clean=['K3023']`, it will change `"NSF Engineering DNA and RNA  K302325F33"` to `"NSF Engineering DNA and RNA"`.
 
+I personally use them like this:
+```python
+suffixes = ['K3023', 'DOTY DEFAULT PROJECT 13U00']
+substrings = ['Doty', 'CS ']
+summary_aug = Summary.from_file('2024-8-1.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
+```
+due to the particular manner in which someone mashed their palm against the keyboard to generate my project names, but you will want to customize according to your own project names.
+
 ## Installation
 I may put this on [PyPI](https://pypi.org/) eventually so that it can be installed via pip. Until then you have to install the hard way:
 

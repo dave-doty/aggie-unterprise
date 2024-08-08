@@ -83,11 +83,11 @@ summary_jul = Summary.from_file('2024-7-11.xlsx')
 
 from IPython.display import display, Markdown
 display(Markdown(f"""\
-### Totals for August
+### Totals for {summary_aug.month()}
 {summary_aug.table(tablefmt='github')}
-### Totals for July
+### Totals for {summary_jul.month()}
 {summary_jul.table(tablefmt='github')}
-### Difference between August and July
+### Difference between {summary_aug.month()} and {summary_jul.month()}
 {summary_aug.diff_table(summary_jul, tablefmt='github')}
 """))
 ```

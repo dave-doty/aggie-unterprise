@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from typing import Iterable
 from openpyxl import load_workbook
 from tabulate import tabulate
+from datetime import datetime
+import calendar
 import locale
 
 locale.setlocale(locale.LC_ALL, '')
@@ -11,8 +13,7 @@ locale.setlocale(locale.LC_ALL, '')
 
 summary_header_row_idx = 17
 detail_header_row_idx = 17
-
-#TODO: look up date report was generated and store in summary (cell A3 in my reports)
+date_cell = 'A3'
 
 MARKDOWN_TABLE_FORMATS = ['github', 'pipe']
 
@@ -72,9 +73,26 @@ def find_expenses_by_category(summary: ProjectSummary, ws_detail, project_name_h
                 print(f"Unknown category {category}; consider adding it to the list of categories?")
 
 
+def extract_date(ws_summary) -> datetime.date:
+    raw = ws_summary[date_cell].value
+    raw = raw.replace('Report Run Date:', '').strip()
+    date_and_time = datetime.strptime(raw, '%Y-%m-%d %I:%M:%S %p')
+    return date_and_time
+
+
 @dataclass
 class Summary:
     project_summaries: list[ProjectSummary]
+    date_and_time: datetime
+
+    def year(self) -> int:
+        return self.date_and_time.year
+
+    def month(self) -> str:
+        return calendar.month_name[self.date_and_time.month]
+
+    def day(self) -> int:
+        return self.date_and_time.day
 
     @staticmethod
     def from_file(fn: str, substrings_to_clean: Iterable[str] = (), suffixes_to_clean: Iterable[str] = ()) -> Summary:
@@ -84,6 +102,9 @@ class Summary:
         wb = load_workbook(filename=fn, read_only=True)
         ws_summary = wb['Summary']
         ws_detail = wb['Detail']
+
+        date = extract_date(ws_summary)
+
         header_row = ws_summary[summary_header_row_idx]
         assert header_row[0].value == "Award Number"
         project_name_header = 'Project Name'
@@ -141,7 +162,7 @@ class Summary:
 
             project_summaries.append(summary)
 
-        return Summary(project_summaries)
+        return Summary(project_summaries, date)
 
     def __str__(self) -> str:
         return self.table()
@@ -245,9 +266,9 @@ if __name__ == '__main__':
     summary_aug = Summary.from_file('2024-8-5.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
     summary_jul = Summary.from_file('2024-7-11.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
 
-    print("Totals for August")
+    print(f"Totals for {summary_aug.month()} {summary_aug.year()}")
     print(summary_aug.table())
-    print("Totals for July")
+    print(f"Totals for {summary_jul.month()} {summary_jul.year()}")
     print(summary_jul.table())
-    print("Difference between August and July")
+    print(f"Difference between {summary_aug.month()} and {summary_jul.month()}")
     print(summary_aug.diff_table(summary_jul))

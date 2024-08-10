@@ -6,9 +6,13 @@ from openpyxl import load_workbook
 from tabulate import tabulate
 from datetime import datetime
 import calendar
-import locale
 
-locale.setlocale(locale.LC_ALL, '')
+def format_currency(amount: float) -> str:
+    # The "proper" way to do this is with the locale module,
+    # but you need the system to have certain locales installed,
+    # and I don't want users to run into those stupid errors,
+    # so we just manually format the currency.
+    return f"${amount:,.2f}"
 
 #TODO: don't hardcode header rows; search for them instead
 
@@ -183,15 +187,15 @@ class Summary:
         for project_summary in self.project_summaries:
             row = [
                 project_summary.project_name,
-                locale.currency(project_summary.expenses, grouping=True),
-                locale.currency(project_summary.salary, grouping=True),
-                locale.currency(project_summary.travel, grouping=True),
-                locale.currency(project_summary.supplies, grouping=True),
-                locale.currency(project_summary.fringe, grouping=True),
-                locale.currency(project_summary.fellowship, grouping=True),
-                locale.currency(project_summary.indirect, grouping=True),
-                locale.currency(project_summary.balance, grouping=True),
-                locale.currency(project_summary.budget, grouping=True),
+                format_currency(project_summary.expenses),
+                format_currency(project_summary.salary),
+                format_currency(project_summary.travel),
+                format_currency(project_summary.supplies),
+                format_currency(project_summary.fringe),
+                format_currency(project_summary.fellowship),
+                format_currency(project_summary.indirect),
+                format_currency(project_summary.balance),
+                format_currency(project_summary.budget),
             ]
             if tablefmt in MARKDOWN_TABLE_FORMATS:
                 # escape $ so markdown does not interpret it as Latex
@@ -215,14 +219,14 @@ class Summary:
             diff = summary_later.diff(summary_earlier)
             row = [
                 diff.project_name,
-                locale.currency(diff.expenses, grouping=True),
-                locale.currency(diff.salary, grouping=True),
-                locale.currency(diff.travel, grouping=True),
-                locale.currency(diff.supplies, grouping=True),
-                locale.currency(diff.fringe, grouping=True),
-                locale.currency(diff.fellowship, grouping=True),
-                locale.currency(diff.indirect, grouping=True),
-                locale.currency(diff.balance, grouping=True),
+                format_currency(diff.expenses),
+                format_currency(diff.salary),
+                format_currency(diff.travel),
+                format_currency(diff.supplies),
+                format_currency(diff.fringe),
+                format_currency(diff.fellowship),
+                format_currency(diff.indirect),
+                format_currency(diff.balance),
             ]
             if tablefmt in MARKDOWN_TABLE_FORMATS:
                 # escape $ so markdown does not interpret it as Latex

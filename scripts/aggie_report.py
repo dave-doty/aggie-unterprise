@@ -157,7 +157,10 @@ def find_filenames(args) -> List[Path]:
         return [Path(file).resolve() for file in args.files]
     assert args.directory is not None
     directory = Path(args.directory).resolve()
-    return [file for file in directory.iterdir() if file.suffix == '.xlsx']
+    fns = [fn for fn in directory.iterdir() if fn.suffix == '.xlsx']
+    if len(fns) == 0:
+        raise FileNotFoundError(f'No .xlsx files found in directory "{directory}"')
+    return fns
 
 if __name__ == '__main__':
     main()

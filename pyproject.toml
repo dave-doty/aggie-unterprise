@@ -22,3 +22,6 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 packages = ["aggie_unterprise"]
+
+[project.scripts]
+aggie-report = "scripts.aggie_report:main"

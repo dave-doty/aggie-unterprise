@@ -1,6 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Iterable
+from typing import Iterable, Union
+from pathlib import Path
 from openpyxl import load_workbook
 from tabulate import tabulate
 from datetime import datetime
@@ -94,11 +95,18 @@ class Summary:
     def day(self) -> int:
         return self.date_and_time.day
 
+    def date(self) -> datetime.date:
+        return self.date_and_time.date()
+
     @staticmethod
-    def from_file(fn: str, substrings_to_clean: Iterable[str] = (), suffixes_to_clean: Iterable[str] = ()) -> Summary:
+    def from_file(fn: Union[Path, str], substrings_to_clean: Iterable[str] = (),
+                  suffixes_to_clean: Iterable[str] = ()) -> Summary:
         """
-        Read the Excel file named `fn` and return a list of summaries of projects in the file.
+        Read the Excel file named `fn` (alternately `fn` can be a pathlib.Path object)
+        and return a list of summaries of projects in the file.
         """
+        if isinstance(fn, Path):
+            fn = str(fn.resolve())
         wb = load_workbook(filename=fn, read_only=True)
         ws_summary = wb['Summary']
         ws_detail = wb['Detail']

@@ -1,5 +1,13 @@
 # aggie-unterprise
 
+This document is intended to be read on [github](https://github.com/dave-doty/aggie-unterprise#readme). Some of what appears below does not render properly on other websites such as pypi.org.
+
+## Table of contents
+
+* [Overview](#overview)
+* [Installation](#installation)
+* [Examples](#examples)
+
 ## Overview
 This is an example of a useful summary of research grant funds:
 
@@ -20,7 +28,33 @@ This is an example of a useful summary of research grant funds:
 The aggie_unterprise Python package helps you, the **AGGIE**, to **UN**do this en**TERPRIS**ing feat. It sifts through the trash to find the important data related to your grants.
 
 
-## Example of usage
+## Installation
+
+There are two options:
+
+### pip (the easy way)
+
+At the command line, type `pip install aggie_unterprise`. This assumes you have [Python](https://www.python.org/) and [pip](https://pip.pypa.io/en/stable/installation/) installed.
+
+### The less easy way in case pip installation doesn't work
+
+Clone the repo and use as a local package.
+
+1. **Install dependencies**: Type `pip install openpyxl tabulate` at the command line.
+
+2. **Clone the repo**: `git clone https://github.com/dave-doty/aggie-unterprise.git`
+
+3. **Add to PYTHONPATH**: Assuming for example that you cloned the repository to the directory `C:\git\aggie-enterprise`, add the directory to your PYTHONPATH. In Windows this is done by going to settings and searching for "Environment Variables":\
+![](images/env-var-search.png)\
+and editing or adding (if necessary) a variable named PYTHONPATH with value `C:\git\aggie-enterprise`:\
+![](images/env-var-set.png)\
+In Linux/Mac, using the bash shell, this can be done by adding the line `PYTHONPATH=$PYTHONPATH:/mnt/c/git/aggie-enterprise` to the file `.bashrc` in your home directory.
+
+4. **Test**: Open a Python interpreter or Jupyter notebook and type `import aggie_unterprise`; it should import without errors.
+
+
+
+## Examples
 Suppose you have generated a spreadsheet from AggieEnterprise named `2024-8-1.xlsx` following [these instructions](https://servicehub.ucdavis.edu/servicehub?id=ucd_kb_article&sys_id=cc1942f61b32c6d80e0b2068b04bcbbf). The following code:
 
 ```python
@@ -106,17 +140,3 @@ summary_aug = Summary.from_file('2024-8-1.xlsx', substrings_to_clean=substrings,
 ```
 due to the particular manner in which someone mashed their forearm against the keyboard to generate the alien-looking project names of my own grants (e.g. "*CS NSF DNA and RNA Partic Support Doty K3023EDRNA*"), but you will want to customize according to the shape of your SPO representative's forearm.
 
-## Installation
-I may put this on [PyPI](https://pypi.org/) eventually so that it can be installed via pip. Until then you have to install the hard way:
-
-1. **Install dependencies**: Type `pip install openpyxl tabulate` at the command line.
-
-2. **Clone the repo**: `git clone https://github.com/dave-doty/aggie-unterprise.git`
-
-3. **Add to PYTHONPATH**: Assuming for example that you cloned the repository to the directory `C:\git\aggie-enterprise`, add the directory to your PYTHONPATH. In Windows this is done by going to settings and searching for "Environment Variables":\
-![](images/env-var-search.png)\
-and editing or adding (if necessary) a variable named PYTHONPATH with value `C:\git\aggie-enterprise`:\
-![](images/env-var-set.png)\
-In Linux/Mac, using the bash shell, this can be done by adding the line `PYTHONPATH=$PYTHONPATH:/mnt/c/git/aggie-enterprise` to the file `.bashrc` in your home directory.
-
-4. **Test**: Open a Python interpreter or Jupyter notebook and type `import aggie_unterprise`; it should import without errors.

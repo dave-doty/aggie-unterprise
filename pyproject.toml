@@ -1,6 +1,6 @@
 [project]
 name = "aggie-unterprise"
-version = "0.1.1"
+version = "0.1.2"
 description = "A Python package for extracting and processing grant data from AggieEnterprise spreadsheets."
 authors = [
     { name="Dave Doty", email="doty@ucdavis.edu" }
@@ -17,3 +17,6 @@ dependencies = [
 [build-system]
 requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["aggie_unterprise"]

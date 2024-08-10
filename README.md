@@ -32,25 +32,24 @@ The aggie_unterprise Python package helps you, the **AGGIE**, to **UN**do this e
 
 There are two options:
 
-### pip (the easy way)
+1. **pip** (the easy way)
+    At the command line, type `pip install aggie_unterprise`. This assumes you have [Python](https://www.python.org/) and [pip](https://pip.pypa.io/en/stable/installation/) installed.
 
-At the command line, type `pip install aggie_unterprise`. This assumes you have [Python](https://www.python.org/) and [pip](https://pip.pypa.io/en/stable/installation/) installed.
-
-### The less easy way in case pip installation doesn't work
-
-Clone the repo and use as a local package.
-
-1. **Install dependencies**: Type `pip install openpyxl tabulate` at the command line.
-
-2. **Clone the repo**: `git clone https://github.com/dave-doty/aggie-unterprise.git`
-
-3. **Add to PYTHONPATH**: Assuming for example that you cloned the repository to the directory `C:\git\aggie-enterprise`, add the directory to your PYTHONPATH. In Windows this is done by going to settings and searching for "Environment Variables":\
-![](images/env-var-search.png)\
-and editing or adding (if necessary) a variable named PYTHONPATH with value `C:\git\aggie-enterprise`:\
-![](images/env-var-set.png)\
-In Linux/Mac, using the bash shell, this can be done by adding the line `PYTHONPATH=$PYTHONPATH:/mnt/c/git/aggie-enterprise` to the file `.bashrc` in your home directory.
-
-4. **Test**: Open a Python interpreter or Jupyter notebook and type `import aggie_unterprise`; it should import without errors.
+2. **less easy way** (in case pip installation doesn't work)
+    
+    Clone the repo and use as a local package:
+    
+    1. **Install dependencies**: Type `pip install openpyxl tabulate` at the command line.
+    
+    2. **Clone the repo**: `git clone https://github.com/dave-doty/aggie-unterprise.git`
+    
+    3. **Add to PYTHONPATH**: Assuming for example that you cloned the repository to the directory `C:\git\aggie-enterprise`, add the directory to your PYTHONPATH. In Windows this is done by going to settings and searching for "Environment Variables":\
+    ![](images/env-var-search.png)\
+    and editing or adding (if necessary) a variable named PYTHONPATH with value `C:\git\aggie-enterprise`:\
+    ![](images/env-var-set.png)\
+    In Linux/Mac, using the bash shell, this can be done by adding the line `PYTHONPATH=$PYTHONPATH:/mnt/c/git/aggie-enterprise` to the file `.bashrc` in your home directory.
+    
+    4. **Test**: Open a Python interpreter or Jupyter notebook and type `import aggie_unterprise`; it should import without errors.
 
 
 

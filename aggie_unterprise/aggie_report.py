@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Optional, List, TextIO
 from aggie_unterprise import Summary
 
-
 def main():
     args: CLArgs = parse_command_line_arguments()
     paths = find_filenames(args)

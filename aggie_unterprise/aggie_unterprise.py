@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Iterable, Union
+from typing import Iterable, Union, List
 from pathlib import Path
 from openpyxl import load_workbook
 from tabulate import tabulate
@@ -87,7 +87,7 @@ def extract_date(ws_summary) -> datetime.date:
 
 @dataclass
 class Summary:
-    project_summaries: list[ProjectSummary]
+    project_summaries: List[ProjectSummary]
     date_and_time: datetime
 
     def year(self) -> int:

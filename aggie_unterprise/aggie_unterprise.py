@@ -270,17 +270,3 @@ class ProjectSummary:
             fellowship=self.fellowship - other.fellowship,
             indirect=self.indirect - other.indirect,
         )
-
-
-if __name__ == '__main__':
-    suffixes = ['K3023', 'DOTY DEFAULT PROJECT 13U00']
-    substrings = ['Doty', 'CS ']
-    summary_aug = Summary.from_file('2024-8-5.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
-    summary_jul = Summary.from_file('2024-7-11.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
-
-    print(f"Totals for {summary_aug.month()} {summary_aug.year()}")
-    print(summary_aug.table())
-    print(f"Totals for {summary_jul.month()} {summary_jul.year()}")
-    print(summary_jul.table())
-    print(f"Difference between {summary_aug.month()} and {summary_jul.month()}")
-    print(summary_aug.diff_table(summary_jul))

@@ -20,7 +20,11 @@ def main():
     if not args.sort_increasing_by_date:
         summaries.reverse()
 
-    with open(args.outfile, 'w', encoding='utf-8') if args.outfile else sys.stdout as file:
+    # For some reason using a context manager causes errors when writing to stdout.
+    # Normally it works, but when I use PyInstaller to create an executable, it tries to close stdout
+    # and causes an error
+    file = open(args.outfile, 'w', encoding='utf-8') if args.outfile is not None else sys.stdout
+    try:
         for sum_prev, sum_next in itertools.pairwise(summaries):
             if args.include_individual_summaries:
                 print_indv_summary(file, sum_prev)
@@ -29,6 +33,9 @@ def main():
         if args.include_individual_summaries:
             last_summary = summaries[-1]
             print_indv_summary(file, last_summary)
+    finally:
+        if file is not sys.stdout:
+            file.close()
 
 
 def print_diff_summary(file: TextIO, sum_prev: Summary, sum_next: Summary) -> None:

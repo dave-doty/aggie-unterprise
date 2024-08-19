@@ -1,12 +1,12 @@
 from __future__ import annotations
 from dataclasses import dataclass
-import itertools
-from typing import Iterable, Union, List
+from typing import Iterable, Union, List, Optional
 from pathlib import Path
 from openpyxl import load_workbook
 from tabulate import tabulate
 from datetime import datetime
 import calendar
+
 
 def format_currency(amount: float) -> str:
     # The "proper" way to do this is with the locale module,
@@ -15,7 +15,8 @@ def format_currency(amount: float) -> str:
     # so we just manually format the currency.
     return f"${amount:,.2f}" if amount >= 0 else f"-${abs(amount):,.2f}"
 
-#TODO: don't hardcode header rows; search for them instead
+
+# TODO: don't hardcode header rows; search for them instead
 
 summary_header_row_idx = 17
 detail_header_row_idx = 17
@@ -36,7 +37,7 @@ def remove_suffix_starting_with(string: str, substrings: Iterable[str]) -> str:
 def remove_substrings(string: str, substrings: Iterable[str]) -> str:
     # make a defensive copy since we modify the list
     substrings = list(substrings)
-    
+
     # sort substrings by substring relation to each other to avoid removing 
     # a subsubstring that causes the remaining part not to be removed
     # e.g., if we have "abc" and "a", we want to remove "abc" first, otherwise
@@ -44,15 +45,16 @@ def remove_substrings(string: str, substrings: Iterable[str]) -> str:
     # " bc My Project" instead of " My Project" because removing the 
     # subsubstring "a" first changes the other substring "abc" to "bc"
     for i, sub1 in enumerate(substrings):
-        for j in range(i+1, len(substrings)):
+        for j in range(i + 1, len(substrings)):
             sub2 = substrings[j]
             if sub1 in sub2:
                 substrings[i], substrings[j] = sub2, sub1
-    
+
     for substring in substrings:
         if substring in string:
             string = string.replace(substring, '')
     return string
+
 
 def clean_whitespace(string: str) -> str:
     return ' '.join(string.split())
@@ -104,10 +106,14 @@ def extract_date(ws_summary) -> datetime.date:
     return date_and_time
 
 
+POSSIBLE_HEADERS = ['Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fellowship', 'Indirect', 'Balance', 'Budget']
+
+
 @dataclass
 class Summary:
     project_summaries: List[ProjectSummary]
     date_and_time: datetime
+    headers: List[str]
 
     def year(self) -> int:
         return self.date_and_time.year
@@ -122,12 +128,22 @@ class Summary:
         return self.date_and_time.date()
 
     @staticmethod
-    def from_file(fn: Union[Path, str], substrings_to_clean: Iterable[str] = (),
-                  suffixes_to_clean: Iterable[str] = ()) -> Summary:
+    def from_file(
+            fn: Union[Path, str],
+            substrings_to_clean: Iterable[str] = (),
+            suffixes_to_clean: Iterable[str] = (),
+            headers: Optional[Iterable[str]] = None,
+    ) -> Summary:
         """
         Read the Excel file named `fn` (alternately `fn` can be a pathlib.Path object)
         and return a list of summaries of projects in the file.
         """
+        if headers is None:
+            headers = POSSIBLE_HEADERS
+        for header in headers:
+            if header not in POSSIBLE_HEADERS:
+                raise ValueError(f"Invalid heading: {header}; must be one of {', '.join(POSSIBLE_HEADERS)}")
+
         if isinstance(fn, Path):
             fn = str(fn.resolve())
         wb = load_workbook(filename=fn, read_only=True)
@@ -183,6 +199,7 @@ class Summary:
             find_expenses_by_category(summary, ws_detail, project_name_header, project_name)
 
             clean_project_name = project_name
+            # TODO: replace this with a check for Project Type = Internal (vs. Sponsored)
             if 'PPM Only' in project_name:
                 # replace with more specific task name
                 clean_project_name = row[summary_col_idxs[task_header]].value
@@ -194,7 +211,7 @@ class Summary:
 
             project_summaries.append(summary)
 
-        return Summary(project_summaries, date)
+        return Summary(project_summaries, date, headers)
 
     def __str__(self) -> str:
         return self.table()
@@ -205,30 +222,32 @@ class Summary:
     def table(self, tablefmt: str = 'rounded_outline') -> str:
         table = []
         for project_summary in self.project_summaries:
-            row = [
-                project_summary.project_name,
-                format_currency(project_summary.expenses),
-                format_currency(project_summary.salary),
-                format_currency(project_summary.travel),
-                format_currency(project_summary.supplies),
-                format_currency(project_summary.fringe),
-                format_currency(project_summary.fellowship),
-                format_currency(project_summary.indirect),
-                format_currency(project_summary.balance),
-                format_currency(project_summary.budget),
-            ]
+            header_to_field = {
+                'Expenses': project_summary.expenses,
+                'Salary': project_summary.salary,
+                'Travel': project_summary.travel,
+                'Supplies': project_summary.supplies,
+                'Fringe': project_summary.fringe,
+                'Fellowship': project_summary.fellowship,
+                'Indirect': project_summary.indirect,
+                'Balance': project_summary.balance,
+                'Budget': project_summary.budget,
+            }
+            row = [project_summary.project_name]
+            for header in self.headers:
+                row.append(format_currency(header_to_field[header]))
+
             if tablefmt in MARKDOWN_TABLE_FORMATS:
                 # escape $ so markdown does not interpret it as Latex
                 for i in range(1, len(row)):
                     row[i] = row[i].replace('$', r'\$')
             table.append(row)
 
-        new_headers = ['Project Name', 'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe',
-                       'Fellowship', 'Indirect', 'Balance', 'Budget']
-        table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt,
-                                   colalign=(
-                                       'left', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right',
-                                       'right'))
+        new_headers = ['Project Name'] + self.headers
+                       # , 'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe',)
+                       # 'Fellowship', 'Indirect', 'Balance', 'Budget']
+        colalign = ['left'] + ['right'] * len(self.headers)
+        table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt, colalign=colalign)
         return table_tabulated
 
     def diff_table(self, summary_earlier: Summary, tablefmt: str = 'rounded_outline') -> str:
@@ -237,28 +256,32 @@ class Summary:
             if summary_later.project_name != summary_earlier.project_name:
                 raise ValueError("Can't diff summaries with different project names")
             diff = summary_later.diff(summary_earlier)
-            row = [
-                diff.project_name,
-                format_currency(diff.expenses),
-                format_currency(diff.salary),
-                format_currency(diff.travel),
-                format_currency(diff.supplies),
-                format_currency(diff.fringe),
-                format_currency(diff.fellowship),
-                format_currency(diff.indirect),
-                format_currency(diff.balance),
-            ]
+            header_to_field = {
+                'Expenses': diff.expenses,
+                'Salary': diff.salary,
+                'Travel': diff.travel,
+                'Supplies': diff.supplies,
+                'Fringe': diff.fringe,
+                'Fellowship': diff.fellowship,
+                'Indirect': diff.indirect,
+                'Balance': diff.balance,
+            }
+            row = [diff.project_name]
+            for header in self.headers:
+                if header == 'Budget': # don't show budget diff since it's always equal between two summaries
+                    continue
+                row.append(format_currency(header_to_field[header]))
+
             if tablefmt in MARKDOWN_TABLE_FORMATS:
                 # escape $ so markdown does not interpret it as Latex
                 for i in range(1, len(row)):
                     row[i] = row[i].replace('$', r'\$')
             table.append(row)
 
-        new_headers = ['Project Name', 'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe',
-                       'Fellowship', 'Indirect', 'Balance']
-        table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt,
-                                   colalign=(
-                                       'left', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right'))
+        new_headers = ['Project Name'] + self.headers
+        num_expense_cols = len(self.headers) - 1 if 'Budget' in self.headers else len(self.headers)
+        colalign = ['left'] + ['right'] * num_expense_cols
+        table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt, colalign=colalign)
         return table_tabulated
 
 

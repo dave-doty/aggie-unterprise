@@ -1,10 +1,18 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import argparse
 import sys
 import itertools
 from pathlib import Path
 from typing import Optional, List, TextIO
 from aggie_unterprise import Summary
+
+
+def combine_substrings_from_file(substrings_file: Optional[str], substrings: List[str]) -> List[str]:
+    if substrings_file is not None:
+        substrings = list(substrings)
+        with open(substrings_file, 'r', encoding='utf-8') as file:
+            substrings.extend(file.read().split())
+    return substrings
 
 def main():
     args: CLArgs = parse_command_line_arguments()
@@ -13,8 +21,10 @@ def main():
     print('  ' + ', '.join(path.name for path in paths))
     print(f'Output will be written to the ' + (f'file {args.outfile}' if args.outfile is not None else 'screen'))
 
+    substrings = combine_substrings_from_file(args.substrings_file, args.substrings_to_clean)
+    suffixes = combine_substrings_from_file(args.suffixes_file, args.suffixes_to_clean)
 
-    summaries = [Summary.from_file(path) for path in paths]
+    summaries = [Summary.from_file(path, substrings_to_clean=substrings, suffixes_to_clean=suffixes) for path in paths]
     summaries.sort(key=lambda s: s.date())
     if not args.sort_increasing_by_date:
         summaries.reverse()
@@ -66,6 +76,20 @@ class CLArgs:
 
     sort_increasing_by_date: bool = False
     """Whether to sort the files by date in increasing order"""
+
+    substrings_to_clean: List[str] = field(default_factory=list)
+    """List of substrings to remove from the project name"""
+
+    suffixes_to_clean: List[str] = field(default_factory=list)
+    """List of substrings to remove from the project name, including 
+    the whole suffix following the substring"""
+
+    substrings_file: Optional[str] = None
+    """Filename containing substrings to remove from the project name"""
+
+    suffixes_file: Optional[str] = None
+    """Filename containing substrings to remove from the project name,
+    including the whole suffix following the substring"""
 
 
 def parse_command_line_arguments() -> CLArgs:
@@ -135,6 +159,39 @@ If specified, sort the files by date in increasing
 order instead of the default, which is to sort by
 date in decreasing order.''')
 
+    parser.add_argument('-sb', '--substrings', nargs='+', type=str,
+                        help='''\
+List of substrings to remove from the project name.
+This can help clean up ugly project names like 
+"NSF CAREER K20304932" by specifying substring "K20304932",
+which would change the project name to "NSF CAREER".''')
+
+    parser.add_argument('-sf', '--suffixes', nargs='+', type=str,
+                        help='''\
+List of substrings to remove from the project name,
+as well as the entire suffix from there to the end.
+This can help clean up ugly project names like 
+"NSF CAREER K302777" and "NSF Small K302999" 
+by specifying substring "K302", which would change 
+these project names "NSF CAREER" and "NSF Small".''')
+
+    parser.add_argument('-sbf', '--substrings-file', type=str,
+                        help='''\
+Filename containing substrings (separated by whitespace 
+or newlines) to remove from the project name. This is 
+like the -sb option, but reads the substrings from a file
+so that you do not have to type them all out at the 
+command line and can reuse them in multiple runs.''')
+
+    parser.add_argument('-sff', '--suffixes-file', type=str,
+                        help='''\
+Filename containing substrings (separated by whitespace 
+or newlines) to remove from the project name, as well as
+the entire suffix from there to the end. This is 
+like the -sf option, but reads the substrings from a file
+so that you do not have to type them all out at the 
+command line and can reuse them in multiple runs.''')
+
     args = parser.parse_args()
     clargs = CLArgs()
 
@@ -157,6 +214,18 @@ date in decreasing order.''')
     assert clargs.include_diffs or clargs.include_individual_summaries
 
     clargs.sort_increasing_by_date = args.sort_increasing_by_date
+
+    if args.substrings is not None:
+        clargs.substrings_to_clean = args.substrings
+
+    if args.suffixes is not None:
+        clargs.suffixes_to_clean = args.suffixes
+
+    if args.substrings_file is not None:
+        clargs.substrings_file = args.substrings_file
+
+    if args.suffixes_file is not None:
+        clargs.suffixes_file = args.suffixes_file
 
     return clargs
 

@@ -116,15 +116,19 @@ class Summary:
     headers: List[str]
 
     def year(self) -> int:
+        """The year of the summary (as an integer)"""
         return self.date_and_time.year
 
     def month(self) -> str:
+        """The month of the summary (as a string)"""
         return calendar.month_name[self.date_and_time.month]
 
     def day(self) -> int:
+        """The day of the summary (as an integer)"""
         return self.date_and_time.day
 
     def date(self) -> datetime.date:
+        """The date of the summary (as a datetime.date object)"""
         return self.date_and_time.date()
 
     @staticmethod
@@ -137,6 +141,21 @@ class Summary:
         """
         Read the Excel file named `fn` (alternately `fn` can be a pathlib.Path object)
         and return a list of summaries of projects in the file.
+
+        Args:
+            fn: The filename (or pathlib.Path object) of the AggieExpense Excel file to read
+            substrings_to_clean: A list of substrings to remove from the project name
+            suffixes_to_clean: A list of substrings to remove from the project name, including
+                the whole suffix following the substring
+            headers: A list of headers to include in the summary; must be a subset of
+                ['Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fellowship', 'Indirect', 'Balance', 'Budget']
+                The headers will be displayed in the order they are given (so is also a way to reorder them
+                from the default order even if you include all of them)
+                If not specified they are all displayed in that order for both the `table` and `diff_table` methods,
+                although the `diff_table` method will not display the 'Budget' column since it should never change
+                in principle.
+        Returns:
+            A Summary object containing the summaries of all the projects in the file.
         """
         if headers is None:
             headers = POSSIBLE_HEADERS
@@ -220,6 +239,15 @@ class Summary:
         return self.table()
 
     def table(self, tablefmt: str = 'rounded_outline') -> str:
+        """
+        Return a string representation of the summary as a string in tabular form.
+
+        Args:
+            tablefmt: The format of the table; see the Python package tabulate documentation for options
+
+        Returns:
+            A string representation of the summary as a string in tabular form
+        """
         table = []
         for project_summary in self.project_summaries:
             header_to_field = {
@@ -251,6 +279,15 @@ class Summary:
         return table_tabulated
 
     def diff_table(self, summary_earlier: Summary, tablefmt: str = 'rounded_outline') -> str:
+        """
+        Return a string representation of the differences between this summary and `summary_earlier`.
+
+        Args:
+            tablefmt: The format of the table; see the Python package tabulate documentation for options
+
+        Returns:
+            A string representation of the summary of differences as a string in tabular form
+        """
         table = []
         for (summary_later, summary_earlier) in zip(self.project_summaries, summary_earlier.project_summaries):
             if summary_later.project_name != summary_earlier.project_name:

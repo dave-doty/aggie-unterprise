@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+import itertools
 from typing import Iterable, Union, List
 from pathlib import Path
 from openpyxl import load_workbook
@@ -12,7 +13,7 @@ def format_currency(amount: float) -> str:
     # but you need the system to have certain locales installed,
     # and I don't want users to run into those stupid errors,
     # so we just manually format the currency.
-    return f"${amount:,.2f}"
+    return f"${amount:,.2f}" if amount >= 0 else f"-${abs(amount):,.2f}"
 
 #TODO: don't hardcode header rows; search for them instead
 
@@ -33,10 +34,28 @@ def remove_suffix_starting_with(string: str, substrings: Iterable[str]) -> str:
 
 
 def remove_substrings(string: str, substrings: Iterable[str]) -> str:
+    # make a defensive copy since we modify the list
+    substrings = list(substrings)
+    
+    # sort substrings by substring relation to each other to avoid removing 
+    # a subsubstring that causes the remaining part not to be removed
+    # e.g., if we have "abc" and "a", we want to remove "abc" first, otherwise
+    # if string is "a abc My Project", we will end up changing like this:
+    # " bc My Project" instead of " My Project" because removing the 
+    # subsubstring "a" first changes the other substring "abc" to "bc"
+    for i, sub1 in enumerate(substrings):
+        for j in range(i+1, len(substrings)):
+            sub2 = substrings[j]
+            if sub1 in sub2:
+                substrings[i], substrings[j] = sub2, sub1
+    
     for substring in substrings:
         if substring in string:
             string = string.replace(substring, '')
     return string
+
+def clean_whitespace(string: str) -> str:
+    return ' '.join(string.split())
 
 
 def find_expenses_by_category(summary: ProjectSummary, ws_detail, project_name_header: str, project_name: str) -> None:
@@ -170,6 +189,7 @@ class Summary:
 
             clean_project_name = remove_suffix_starting_with(clean_project_name, suffixes_to_clean)
             clean_project_name = remove_substrings(clean_project_name, substrings_to_clean)
+            clean_project_name = clean_whitespace(clean_project_name)
             summary.project_name = clean_project_name
 
             project_summaries.append(summary)

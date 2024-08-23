@@ -16,7 +16,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/dave-doty/aggie-unterprise"
 Issues = "https://github.com/dave-doty/aggie-unterprise/issues"
-Documentation = "https://aggie-unterprise.readthedocs.io/"
+API = "https://aggie-unterprise.readthedocs.io/"
 
 
 [build-system]

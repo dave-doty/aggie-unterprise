@@ -1,0 +1,47 @@
+name: Build Executables
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            dist_name: dist_linux
+          - os: windows-latest
+            dist_name: dist_win
+          - os: macos-latest
+            dist_name: dist_mac
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller openpyxl tabulate
+
+    - name: Build executable
+      run: |
+        cd ${{ github.workspace }}
+        pyinstaller --onefile aggie_unterprise/aggie_report.py --distpath ${{ matrix.dist_name }}
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./${{ matrix.dist_name }}/aggie-report*
+        asset_name: aggie-report-${{ matrix.dist_name }}
+        asset_content_type: application/octet-stream

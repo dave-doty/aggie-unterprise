@@ -20,6 +20,8 @@ or if that doesn't work:
 pyinstaller --onefile --hidden-import=openpyxl --hidden-import=tabulate scripts/aggie_report.py --distpath dist_win
 This creates the file aggie-report.exe in dist_win.
 
-6. Open WSL and cs to repo root.
+6. Open WSL and cd to repo root.
 
-7. pyinstaller --onefile aggie_unterprise/aggie_report.py --distpath dist_linux
+7. conda activate clean_env (assuming you've created the clean_env virtual environment in WSL as with Windows above)
+
+8. pyinstaller --onefile aggie_unterprise/aggie_report.py --distpath dist_linux

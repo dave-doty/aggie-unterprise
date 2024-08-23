@@ -7,19 +7,21 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
             dist_name: dist_linux
-            executable_name: aggie-report
+            executable_name: aggie_report
           - os: windows-latest
             dist_name: dist_win
-            executable_name: aggie-report.exe
+            executable_name: aggie_report.exe
           - os: macos-latest
             dist_name: dist_mac
-            executable_name: aggie-report
+            executable_name: aggie_report
 
     steps:
     - uses: actions/checkout@v2
@@ -43,10 +45,12 @@ jobs:
       run: |
         ls -lR ${{ matrix.dist_name }}
 
-    - name: Check file permissions
+    - name: Rename executable if necessary
       run: |
-        chmod +x ${{ matrix.dist_name }}/${{ matrix.executable_name }}
-        ls -l ${{ matrix.dist_name }}/${{ matrix.executable_name }}
+        if [ -f "${{ matrix.dist_name }}/${{ matrix.executable_name }}" ]; then
+          mv "${{ matrix.dist_name }}/${{ matrix.executable_name }}" "${{ matrix.dist_name }}/aggie-report${{ runner.os == 'Windows' && '.exe' || '' }}"
+        fi
+        ls -l ${{ matrix.dist_name }}
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
@@ -54,7 +58,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ${{ github.workspace }}/${{ matrix.dist_name }}/${{ matrix.executable_name }}
+        asset_path: ${{ github.workspace }}/${{ matrix.dist_name }}/aggie-report${{ runner.os == 'Windows' && '.exe' || '' }}
         asset_name: aggie-report-${{ matrix.dist_name }}${{ runner.os == 'Windows' && '.exe' || '' }}
         asset_content_type: application/octet-stream
 

@@ -268,12 +268,12 @@ class Summary:
             if tablefmt in MARKDOWN_TABLE_FORMATS:
                 # escape $ so markdown does not interpret it as Latex
                 for i in range(1, len(row)):
-                    row[i] = row[i].replace('$', r'\$')
+                    row[i] = row[i].replace('$', r'\$')  # type:ignore #PyCharm thinks list has not [] operator
             table.append(row)
 
         new_headers = ['Project Name'] + self.headers
-                       # , 'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe',)
-                       # 'Fellowship', 'Indirect', 'Balance', 'Budget']
+        # , 'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe',)
+        # 'Fellowship', 'Indirect', 'Balance', 'Budget']
         colalign = ['left'] + ['right'] * len(self.headers)
         table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt, colalign=colalign)
         return table_tabulated
@@ -283,6 +283,8 @@ class Summary:
         Return a string representation of the differences between this summary and `summary_earlier`.
 
         Args:
+            summary_earlier: The earlier Summary object to compare against
+
             tablefmt: The format of the table; see the Python package tabulate documentation for options
 
         Returns:
@@ -305,7 +307,7 @@ class Summary:
             }
             row = [diff.project_name]
             for header in self.headers:
-                if header == 'Budget': # don't show budget diff since it's always equal between two summaries
+                if header == 'Budget':  # don't show budget diff since it's always equal between two summaries
                     continue
                 row.append(format_currency(header_to_field[header]))
 

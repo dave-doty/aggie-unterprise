@@ -1,0 +1,18 @@
+site_name: aggie_unterprise
+theme: readthedocs
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_source: false
+            show_if_no_docstring: true
+            separate_signature: true
+            show_signature_annotations: true
+            docstring_section_style: table
+            show_symbol_type_heading: true
+            docstring_style: google
+nav:
+  - Home: index.md

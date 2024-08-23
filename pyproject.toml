@@ -25,3 +25,7 @@ packages = ["aggie_unterprise"]
 
 [project.scripts]
 aggie-report = "aggie_unterprise.aggie_report:main"
+
+[project.urls]
+"Homepage" = "https://github.com/dave-doty/aggie-unterprise"
+"Bug Tracker" = "https://github.com/dave-doty/aggie-unterprise/issues"

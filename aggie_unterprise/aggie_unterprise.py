@@ -243,7 +243,8 @@ class Summary:
         Return a string representation of the summary as a string in tabular form.
 
         Args:
-            tablefmt: The format of the table; see the Python package tabulate documentation for options
+            tablefmt: The format of the table; see the Python package tabulate documentation for options.\
+            <https://github.com/astanin/python-tabulate#table-format>
 
         Returns:
             A string representation of the summary as a string in tabular form
@@ -268,12 +269,10 @@ class Summary:
             if tablefmt in MARKDOWN_TABLE_FORMATS:
                 # escape $ so markdown does not interpret it as Latex
                 for i in range(1, len(row)):
-                    row[i] = row[i].replace('$', r'\$')  # type:ignore #PyCharm thinks list has not [] operator
+                    row[i] = row[i].replace('$', r'\$')  # type:ignore #PyCharm thinks list has no [] operator
             table.append(row)
 
         new_headers = ['Project Name'] + self.headers
-        # , 'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe',)
-        # 'Fellowship', 'Indirect', 'Balance', 'Budget']
         colalign = ['left'] + ['right'] * len(self.headers)
         table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt, colalign=colalign)
         return table_tabulated
@@ -283,9 +282,10 @@ class Summary:
         Return a string representation of the differences between this summary and `summary_earlier`.
 
         Args:
-            summary_earlier: The earlier Summary object to compare against
+            summary_earlier: The earlier [`Summary`][aggie_unterprise.Summary] object to compare against
 
-            tablefmt: The format of the table; see the Python package tabulate documentation for options
+            tablefmt: The format of the table; see the Python package tabulate documentation for options.\
+            <https://github.com/astanin/python-tabulate#table-format>
 
         Returns:
             A string representation of the summary of differences as a string in tabular form

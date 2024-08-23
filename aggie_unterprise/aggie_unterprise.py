@@ -145,13 +145,13 @@ class Summary:
             fn: The filename (or [`pathlib.Path`](<https://docs.python.org/3/library/pathlib.html>) object)
                 of the AggieExpense Excel file to read.
 
-            substrings_to_clean: A list of substrings to remove from the project name
+            substrings_to_clean: A list of substrings to remove from the project names
 
-            suffixes_to_clean: A list of substrings to remove from the project name, including
+            suffixes_to_clean: A list of substrings to remove from the project names, including
                 the whole suffix following the substring
 
         Returns:
-            A Summary object containing the summaries of all the projects in the file.
+            A [`Summary`][aggie_unterprise.Summary] object containing the summaries of all the projects in the file.
         """
         if isinstance(fn, Path):
             fn = str(fn.resolve())

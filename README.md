@@ -153,3 +153,5 @@ C:\> aggie-report -d reports
 ```
 
 Assuming you have a directory C:\reports with your reports in it, this will print to the screen a summary of each report, as well as a summary of differences between reports. It sorts them in descending order of the date they were produced (so prints the latest one first). Type `aggie-report -h` to see all the options.
+
+There are also pre-compiled versions of this file for [Windows](dist_win/aggie_report.exe) and [Linux](dist_linux/aggie_report).

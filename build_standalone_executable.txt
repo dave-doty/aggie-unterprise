@@ -1,5 +1,6 @@
 Steps:
 
+**Skip to step 2 if you've done step 1 once in the past
 1. Create clean virtualenv (this avoids some problem with pathlib):
 cd to home (e.g., C:\Users\pexat or /home/pexat)
 conda create -n clean_env python=3.12
@@ -7,14 +8,18 @@ conda create -n clean_env python=3.12
 2. Activate environment
 conda activate clean_env
 
+** skip to step 4 if you've already done this in the environment
 3. Install pyinstaller and dependencies
 pip install pyinstaller openpyxl tabulate
 
 4. cd to repo root directory
 
-5. pyinstaller --onefile scripts/aggie_report.py --distpath dist_win
+5. pyinstaller --onefile aggie_unterprise/aggie_report.py --distpath dist_win
 (or --distpath dist_linux or --distpath dist_mac)
 or if that doesn't work:
 pyinstaller --onefile --hidden-import=openpyxl --hidden-import=tabulate scripts/aggie_report.py --distpath dist_win
-
 This creates the file aggie-report.exe in dist_win.
+
+6. Open WSL and cs to repo root.
+
+7. pyinstaller --onefile aggie_unterprise/aggie_report.py --distpath dist_linux

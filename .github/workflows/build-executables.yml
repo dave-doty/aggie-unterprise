@@ -71,7 +71,7 @@ jobs:
         pwd
         echo "Directory contents:"
         if [ "${{ runner.os }}" == "Windows" ]; then
-          Get-ChildItem -Recurse
+          dir
         else
           ls -lR
         fi

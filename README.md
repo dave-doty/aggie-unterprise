@@ -7,6 +7,7 @@ This document is intended to be read on [github](https://github.com/dave-doty/ag
 * [Overview](#overview)
 * [Installation](#installation)
 * [Examples](#examples)
+* [API](#api)
 * [Standalone program](#standalone-program)
 
 ## Overview
@@ -139,6 +140,10 @@ substrings = ['Doty', 'CS ']
 summary_aug = Summary.from_file('2024-8-1.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
 ```
 due to the particular manner in which someone mashed their forearm against the keyboard to generate the alien-looking project names of my own grants (e.g. "*CS NSF DNA and RNA Partic Support Doty K3023EDRNA*"), but you will want to customize according to the shape of your SPO representative's forearm.
+
+## API
+API documentation is [here](https://readthedocs.org/projects/aggie-unterprise).
+
 
 ## Standalone program
 In case you are afraid to write Python code, if you are willing to [install Python](https://www.python.org/downloads/) and use the command line, the `aggie_unterprise` package comes with a standalone executable you can use. You still need to install the package by typing `pip install aggie_unterprise`. After doing this, you should have a program named `aggie-report` you can use:

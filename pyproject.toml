@@ -9,7 +9,7 @@ readme = "README.md"
 requires-python = ">=3.7"
 license = { text = "MIT" }
 
-urls = { "Homepage" = "https://github.com/dave-doty/aggie-unterprise" }
+urls = { "Homepage" = "https://github.com/dave-doty/aggie-unterprise", "Bug Tracker" = "https://github.com/dave-doty/aggie-unterprise/issues"}
 
 dependencies = [
     "openpyxl>=3.0.0",
@@ -26,6 +26,4 @@ packages = ["aggie_unterprise"]
 [project.scripts]
 aggie-report = "aggie_unterprise.aggie_report:main"
 
-[project.urls]
-"Homepage" = "https://github.com/dave-doty/aggie-unterprise"
-"Bug Tracker" = "https://github.com/dave-doty/aggie-unterprise/issues"
+

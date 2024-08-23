@@ -7,12 +7,19 @@ plugins:
       handlers:
         python:
           options:
-            show_source: false
-            show_if_no_docstring: true
+            show_source: true
+            show_if_no_docstring: false
             separate_signature: true
             show_signature_annotations: true
             docstring_section_style: table
             show_symbol_type_heading: true
             docstring_style: google
+            line_length: 100
+            merge_init_into_class: true
+            show_submodules: true
+            selection:
+              members:
+                - aggie_unterprise
+                - Summary
 nav:
   - Home: index.md

@@ -113,40 +113,30 @@ POSSIBLE_HEADERS = ['Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fello
 class Summary:
     project_summaries: List[ProjectSummary]
     date_and_time: datetime
-    headers: List[str]
 
     @staticmethod
     def from_file(
             fn: Union[Path, str],
             substrings_to_clean: Iterable[str] = (),
             suffixes_to_clean: Iterable[str] = (),
-            headers: Optional[Iterable[str]] = None,
     ) -> Summary:
         """
-        Read the Excel file named `fn` (alternately `fn` can be a pathlib.Path object)
+        Read the Excel file named `fn` (alternately `fn` can be a
+        [`pathlib.Path`](https://docs.python.org/3/library/pathlib.html) object)
         and return a list of summaries of projects in the file.
 
         Args:
-            fn: The filename (or pathlib.Path object) of the AggieExpense Excel file to read
+            fn: The filename (or [`pathlib.Path`](<https://docs.python.org/3/library/pathlib.html>) object)
+            of the AggieExpense Excel file to read
+
             substrings_to_clean: A list of substrings to remove from the project name
+
             suffixes_to_clean: A list of substrings to remove from the project name, including
                 the whole suffix following the substring
-            headers: A list of headers to include in the summary; must be a subset of
-                ['Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fellowship', 'Indirect', 'Balance', 'Budget']
-                The headers will be displayed in the order they are given (so is also a way to reorder them
-                from the default order even if you include all of them)
-                If not specified they are all displayed in that order for both the `table` and `diff_table` methods,
-                although the `diff_table` method will not display the 'Budget' column since it should never change
-                in principle.
+
         Returns:
             A Summary object containing the summaries of all the projects in the file.
         """
-        if headers is None:
-            headers = POSSIBLE_HEADERS
-        for header in headers:
-            if header not in POSSIBLE_HEADERS:
-                raise ValueError(f"Invalid heading: {header}; must be one of {', '.join(POSSIBLE_HEADERS)}")
-
         if isinstance(fn, Path):
             fn = str(fn.resolve())
         wb = load_workbook(filename=fn, read_only=True)
@@ -214,7 +204,7 @@ class Summary:
 
             project_summaries.append(summary)
 
-        return Summary(project_summaries, date, headers)
+        return Summary(project_summaries, date)
 
     def __str__(self) -> str:
         return self.table()
@@ -222,17 +212,28 @@ class Summary:
     def __repr__(self) -> str:
         return self.table()
 
-    def table(self, tablefmt: str = 'rounded_outline') -> str:
+    def table(self, tablefmt: str = 'rounded_outline', headers: Optional[Iterable[str]] = None) -> str:
         """
         Return a string representation of the summary as a string in tabular form.
 
         Args:
-            tablefmt: The format of the table; see the Python package tabulate documentation for options.\
-            <https://github.com/astanin/python-tabulate#table-format>
+            tablefmt: The format of the table; see the Python package\
+            [tabulate documentation](<https://github.com/astanin/python-tabulate#table-format>) for options.
+
+            headers: A list of headers to include in the table; must be a subset of
+                `{'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fellowship', 'Indirect', 'Balance', 'Budget'}`
+                The headers will be displayed in the order they are given, so is also a way to reorder them
+                from the default order even if you include all of them.
 
         Returns:
             A string representation of the summary as a string in tabular form
         """
+        if headers is None:
+            headers = POSSIBLE_HEADERS
+        for header in headers:
+            if header not in POSSIBLE_HEADERS:
+                raise ValueError(f"Invalid heading: {header}; must be one of {', '.join(POSSIBLE_HEADERS)}")
+
         table = []
         for project_summary in self.project_summaries:
             header_to_field = {
@@ -247,7 +248,7 @@ class Summary:
                 'Budget': project_summary.budget,
             }
             row = [project_summary.project_name]
-            for header in self.headers:
+            for header in headers:
                 row.append(format_currency(header_to_field[header]))
 
             if tablefmt in MARKDOWN_TABLE_FORMATS:
@@ -256,24 +257,37 @@ class Summary:
                     row[i] = row[i].replace('$', r'\$')  # type:ignore #PyCharm thinks list has no [] operator
             table.append(row)
 
-        new_headers = ['Project Name'] + self.headers
-        colalign = ['left'] + ['right'] * len(self.headers)
+        new_headers = ['Project Name'] + headers
+        colalign = ['left'] + ['right'] * len(headers)
         table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt, colalign=colalign)
         return table_tabulated
 
-    def diff_table(self, summary_earlier: Summary, tablefmt: str = 'rounded_outline') -> str:
+    def diff_table(self, summary_earlier: Summary, tablefmt: str = 'rounded_outline',
+                   headers: Optional[Iterable[str]] = None) -> str:
         """
         Return a string representation of the differences between this summary and `summary_earlier`.
 
         Args:
             summary_earlier: The earlier [`Summary`][aggie_unterprise.Summary] object to compare against
 
-            tablefmt: The format of the table; see the Python package tabulate documentation for options.\
-            <https://github.com/astanin/python-tabulate#table-format>
+            tablefmt: The format of the table; see the Python package\
+            [tabulate documentation](<https://github.com/astanin/python-tabulate#table-format>) for options.
+
+            headers: A list of headers to include in the diff table; must be a subset of
+                `{'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fellowship', 'Indirect', 'Balance'}`
+                (Note that 'Budget' is not included since it should always equal between two summaries.)
+                The headers will be displayed in the order they are given, so is also a way to reorder them
+                from the default order even if you include all of them.
 
         Returns:
             A string representation of the summary of differences as a string in tabular form
         """
+        if headers is None:
+            headers = POSSIBLE_HEADERS
+        for header in headers:
+            if header not in POSSIBLE_HEADERS:
+                raise ValueError(f"Invalid heading: {header}; must be one of {', '.join(POSSIBLE_HEADERS)}")
+
         table = []
         for (summary_later, summary_earlier) in zip(self.project_summaries, summary_earlier.project_summaries):
             if summary_later.project_name != summary_earlier.project_name:
@@ -290,7 +304,7 @@ class Summary:
                 'Balance': diff.balance,
             }
             row = [diff.project_name]
-            for header in self.headers:
+            for header in headers:
                 if header == 'Budget':  # don't show budget diff since it's always equal between two summaries
                     continue
                 row.append(format_currency(header_to_field[header]))
@@ -301,12 +315,11 @@ class Summary:
                     row[i] = row[i].replace('$', r'\$')
             table.append(row)
 
-        new_headers = ['Project Name'] + self.headers
-        num_expense_cols = len(self.headers) - 1 if 'Budget' in self.headers else len(self.headers)
+        new_headers = ['Project Name'] + headers
+        num_expense_cols = len(headers) - 1 if 'Budget' in headers else len(headers)
         colalign = ['left'] + ['right'] * num_expense_cols
         table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt, colalign=colalign)
         return table_tabulated
-
 
     def year(self) -> int:
         """The year of the summary (as an integer)"""
@@ -325,21 +338,57 @@ class Summary:
         return self.date_and_time.date()
 
 
-
 @dataclass
 class ProjectSummary:
+    """
+    Objecting summarizing a single project, with a name and several dollar amounts gathered from the
+    AggieEnterprise Excel file when the ProjectSummary object is constructed when calling
+    [`Summary.from_file`][aggie_unterprise.Summary.from_file].
+    """
+
     project_name: str
+    """Name of the project. Comes from the column "Project Name" if the project is sponsored 
+    (through an external grant) and from the column "Task/Subtask Name" if the project is internal."""
+
     balance: float
+    """The balance of the project. Comes from the column "Budget Balance (Budget – (Comm & Exp))"."""
+
     budget: float
+    """The total budget of the project. Comes from the column "Budget"."""
+
     expenses: float
+    """The total expenses of the project. Comes from the column "Expenses" The other specific types of expenses
+    (salary, travel, etc.) should add up to this number."""
+
     salary: float
+    """The salary expenses of the project. Comes from the column "Salaries and Wages" in the Detail worksheet."""
+
     travel: float
+    """The travel expenses of the project. Comes from the column "Travel" in the Detail worksheet."""
+
     supplies: float
+    """The supplies expenses of the project. Comes from the column "Supplies / Services / Other Expenses" 
+    in the Detail worksheet."""
+
     fringe: float
+    """The fringe benefits expenses of the project. Comes from the column "Fringe Benefits" in the Detail worksheet."""
+
     fellowship: float
+    """The fellowship and scholarships expenses of the project. Comes from the column "Fellowship & Scholarships"""
+
     indirect: float
+    """The indirect costs of the project. Comes from the column "Indirect Costs" in the Detail worksheet."""
 
     def diff(self, other: ProjectSummary) -> ProjectSummary:
+        """
+        Return a new ProjectSummary object that is the difference between this ProjectSummary and `other`.
+
+        Args:
+            other: The other ProjectSummary object to compare against
+
+        Returns:
+            A new ProjectSummary object that is the difference between this ProjectSummary and `other`.
+        """
         if self.project_name != other.project_name:
             raise ValueError("Can't diff summaries with different project names")
         return ProjectSummary(

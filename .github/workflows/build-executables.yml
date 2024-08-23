@@ -15,10 +15,13 @@ jobs:
         include:
           - os: ubuntu-latest
             dist_name: linux
+            file_extension: ""
           - os: windows-latest
             dist_name: windows
+            file_extension: ".exe"
           - os: macos-latest
             dist_name: mac
+            file_extension: ""
 
     steps:
     - uses: actions/checkout@v2
@@ -41,11 +44,7 @@ jobs:
     - name: Rename executable
       shell: bash
       run: |
-        if [ "${{ runner.os }}" == "Windows" ]; then
-          mv ${{ matrix.dist_name }}/aggie_report.exe ${{ matrix.dist_name }}/aggie-report.exe
-        else
-          mv ${{ matrix.dist_name }}/aggie_report ${{ matrix.dist_name }}/aggie-report
-        fi
+        mv ${{ matrix.dist_name }}/aggie_report${{ matrix.file_extension }} ${{ matrix.dist_name }}/aggie-report${{ matrix.file_extension }}
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
@@ -53,27 +52,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ${{ matrix.dist_name }}/aggie-report${{ runner.os == 'Windows' && '.exe' || '' }}
-        asset_name: aggie-report-${{ matrix.dist_name }}${{ runner.os == 'Windows' && '.exe' || '' }}
+        asset_path: ${{ matrix.dist_name }}/aggie-report${{ matrix.file_extension }}
+        asset_name: aggie-report-${{ matrix.dist_name }}${{ matrix.file_extension }}
         asset_content_type: application/octet-stream
-
-    - name: Upload Artifact (for debugging)
-      uses: actions/upload-artifact@v2
-      with:
-        name: aggie-report-${{ matrix.dist_name }}
-        path: ${{ matrix.dist_name }}
-
-    - name: Debug Info
-      if: failure()
-      shell: bash
-      run: |
-        echo "Current directory:"
-        pwd
-        echo "Directory contents:"
-        if [ "${{ runner.os }}" == "Windows" ]; then
-          dir
-        else
-          ls -lR
-        fi
-        echo "Environment variables:"
-        env

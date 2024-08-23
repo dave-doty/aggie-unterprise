@@ -41,7 +41,12 @@ jobs:
 
     - name: List directory contents (for debugging)
       run: |
-        ls -R ${{ matrix.dist_name }}
+        ls -lR ${{ matrix.dist_name }}
+
+    - name: Check file permissions
+      run: |
+        chmod +x ${{ matrix.dist_name }}/${{ matrix.executable_name }}
+        ls -l ${{ matrix.dist_name }}/${{ matrix.executable_name }}
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
@@ -58,3 +63,13 @@ jobs:
       with:
         name: aggie-report-${{ matrix.dist_name }}
         path: ${{ github.workspace }}/${{ matrix.dist_name }}
+
+    - name: Debug Info
+      if: failure()
+      run: |
+        echo "Current directory:"
+        pwd
+        echo "Directory contents:"
+        ls -lR
+        echo "Environment variables:"
+        env

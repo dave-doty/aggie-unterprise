@@ -150,7 +150,7 @@ If you do not want to install Python or write Python code, there is a standalone
 - [Windows](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-windows.exe)
 - [Linux](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-linux)
 - [macOS](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-mac)
-- <a href="https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-windows.exe" download="aggie-report.exe">Windows</a>
+- <a href="https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-windows.exe" download="aggie-report">Windows</a>
 
 After downloading it, run `aggie-report -h` to see all the options.
 

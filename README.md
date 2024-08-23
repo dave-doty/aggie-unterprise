@@ -147,14 +147,11 @@ due to the particular manner in which someone mashed their forearm against the k
 
 ## Standalone program
 If you do not want to install Python or write Python code, there is a standalone command-line program called aggie-report that can do some basic tasks. There are pre-compiled versions of aggie-report you can download:
-- [Windows](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-windows.exe)
-- [Linux](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-linux)
-- [macOS](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-mac)
-- <a href="https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-windows.exe" download="aggie-report">Windows</a>
-- <a href="https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-linux" download="aggie-report">Linux</a>
-- <a href="https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-mac" download="aggie-report">macOS</a>
+- [Windows](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-windows.exe) (save as `aggie-report.exe`)
+- [Linux](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-linux) (save as `aggie-report`)
+- [macOS](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-mac) (save as `aggie-report`)
 
-After downloading it, run `aggie-report -h` to see all the options.
+Open a command prompt in the directory where you saved the file and run `aggie-report -h` to see all the options.
 
 If neither of those work or if you have a Mac, you can [install Python](https://www.python.org/downloads/), install the package by typing `pip install aggie_unterprise`. After doing this, you should have a program named `aggie-report` you can use:
 

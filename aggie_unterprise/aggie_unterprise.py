@@ -16,6 +16,9 @@ def format_currency(amount: float) -> str:
     return f"${amount:,.2f}" if amount >= 0 else f"-${abs(amount):,.2f}"
 
 
+# TODO:
+
+
 # TODO: don't hardcode header rows; search for them instead
 
 summary_header_row_idx = 17
@@ -112,8 +115,8 @@ POSSIBLE_HEADERS = ['Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fello
 @dataclass
 class Summary:
     """
-    A summary of all the projects in the AggieEnterprise Excel file create by following
-    [these instructions](https://servicehub.ucdavis.edu/servicehub?id=ucd_kb_article&sys_id=cc1942f61b32c6d80e0b2068b04bcbbf).
+    A summary of all the projects in the AggieEnterprise Excel file create by following [these instructions](
+    https://servicehub.ucdavis.edu/servicehub?id=ucd_kb_article&sys_id=cc1942f61b32c6d80e0b2068b04bcbbf).
 
     Create a Summary object by calling [`Summary.from_file`][aggie_unterprise.Summary.from_file]
     with the filename of the Excel file:
@@ -330,7 +333,8 @@ class Summary:
             if tablefmt in MARKDOWN_TABLE_FORMATS:
                 # escape $ so markdown does not interpret it as Latex
                 for i in range(1, len(row)):
-                    row[i] = row[i].replace('$', r'\$')
+                    # PyCharm thinks list has no [] operator
+                    row[i] = row[i].replace('$', r'\$')  # type:ignore
             table.append(row)
 
         new_headers = ['Project Name'] + headers

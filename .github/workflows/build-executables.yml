@@ -38,15 +38,6 @@ jobs:
         mkdir -p ${{ matrix.dist_name }}
         pyinstaller --onefile aggie_unterprise/aggie_report.py --distpath ${{ matrix.dist_name }}
 
-    - name: List directory contents (for debugging)
-      shell: bash
-      run: |
-        if [ "${{ runner.os }}" == "Windows" ]; then
-          Get-ChildItem -Recurse ${{ matrix.dist_name }}
-        else
-          ls -lR ${{ matrix.dist_name }}
-        fi
-
     - name: Rename executable
       shell: bash
       run: |

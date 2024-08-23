@@ -142,7 +142,7 @@ summary_aug = Summary.from_file('2024-8-1.xlsx', substrings_to_clean=substrings,
 due to the particular manner in which someone mashed their forearm against the keyboard to generate the alien-looking project names of my own grants (e.g. "*CS NSF DNA and RNA Partic Support Doty K3023EDRNA*"), but you will want to customize according to the shape of your SPO representative's forearm.
 
 ## API
-API documentation is [here](https://readthedocs.org/projects/aggie-unterprise).
+API documentation is [here](https://aggie-unterprise.readthedocs.io/).
 
 
 ## Standalone program

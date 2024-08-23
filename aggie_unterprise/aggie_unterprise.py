@@ -115,22 +115,6 @@ class Summary:
     date_and_time: datetime
     headers: List[str]
 
-    def year(self) -> int:
-        """The year of the summary (as an integer)"""
-        return self.date_and_time.year
-
-    def month(self) -> str:
-        """The month of the summary (as a string)"""
-        return calendar.month_name[self.date_and_time.month]
-
-    def day(self) -> int:
-        """The day of the summary (as an integer)"""
-        return self.date_and_time.day
-
-    def date(self) -> datetime.date:
-        """The date of the summary (as a datetime.date object)"""
-        return self.date_and_time.date()
-
     @staticmethod
     def from_file(
             fn: Union[Path, str],
@@ -322,6 +306,24 @@ class Summary:
         colalign = ['left'] + ['right'] * num_expense_cols
         table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt, colalign=colalign)
         return table_tabulated
+
+
+    def year(self) -> int:
+        """The year of the summary (as an integer)"""
+        return self.date_and_time.year
+
+    def month(self) -> str:
+        """The month of the summary (as a string)"""
+        return calendar.month_name[self.date_and_time.month]
+
+    def day(self) -> int:
+        """The day of the summary (as an integer)"""
+        return self.date_and_time.day
+
+    def date(self) -> datetime.date:
+        """The date of the summary (as a datetime.date object)"""
+        return self.date_and_time.date()
+
 
 
 @dataclass

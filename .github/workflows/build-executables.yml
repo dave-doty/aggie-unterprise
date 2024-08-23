@@ -13,10 +13,13 @@ jobs:
         include:
           - os: ubuntu-latest
             dist_name: dist_linux
+            executable_name: aggie-report
           - os: windows-latest
             dist_name: dist_win
+            executable_name: aggie-report.exe
           - os: macos-latest
             dist_name: dist_mac
+            executable_name: aggie-report
 
     steps:
     - uses: actions/checkout@v2
@@ -36,18 +39,22 @@ jobs:
         cd ${{ github.workspace }}
         pyinstaller --onefile aggie_unterprise/aggie_report.py --distpath ${{ matrix.dist_name }}
 
+    - name: List directory contents (for debugging)
+      run: |
+        ls -R ${{ matrix.dist_name }}
+
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./${{ matrix.dist_name }}/${{ matrix.executable_name }}
-        asset_name: aggie-report-${{ matrix.dist_name }}
+        asset_path: ${{ github.workspace }}/${{ matrix.dist_name }}/${{ matrix.executable_name }}
+        asset_name: aggie-report-${{ matrix.dist_name }}${{ runner.os == 'Windows' && '.exe' || '' }}
         asset_content_type: application/octet-stream
 
     - name: Upload Artifact (for debugging)
       uses: actions/upload-artifact@v2
       with:
         name: aggie-report-${{ matrix.dist_name }}
-        path: ./${{ matrix.dist_name }}
+        path: ${{ github.workspace }}/${{ matrix.dist_name }}

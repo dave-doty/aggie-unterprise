@@ -111,8 +111,23 @@ POSSIBLE_HEADERS = ['Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fello
 
 @dataclass
 class Summary:
+    """
+    A summary of all the projects in the AggieEnterprise Excel file.
+
+    Create a Summary object by calling [`Summary.from_file`][aggie_unterprise.Summary.from_file]
+    with the filename of the Excel file:
+
+    ```python
+    summary = Summary.from_file('2024-8-5.xlsx')
+    ```
+    """
+
     project_summaries: List[ProjectSummary]
+    """A list of [`ProjectSummary`][aggie_unterprise.ProjectSummary]'s, one for each project found in the
+    AggieEnterprise Excel file read by [`Summary.from_file`][aggie_unterprise.Summary.from_file]"""
+
     date_and_time: datetime
+    """The date and time the summary was generated"""
 
     @staticmethod
     def from_file(
@@ -127,7 +142,7 @@ class Summary:
 
         Args:
             fn: The filename (or [`pathlib.Path`](<https://docs.python.org/3/library/pathlib.html>) object)
-            of the AggieExpense Excel file to read
+                of the AggieExpense Excel file to read.
 
             substrings_to_clean: A list of substrings to remove from the project name
 
@@ -224,6 +239,7 @@ class Summary:
                 `{'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fellowship', 'Indirect', 'Balance', 'Budget'}`
                 The headers will be displayed in the order they are given, so is also a way to reorder them
                 from the default order even if you include all of them.
+                If not specified, all headers will be included in the default order.
 
         Returns:
             A string representation of the summary as a string in tabular form
@@ -278,6 +294,7 @@ class Summary:
                 (Note that 'Budget' is not included since it should always equal between two summaries.)
                 The headers will be displayed in the order they are given, so is also a way to reorder them
                 from the default order even if you include all of them.
+                If not specified, all headers will be included in the default order.
 
         Returns:
             A string representation of the summary of differences as a string in tabular form

@@ -169,6 +169,8 @@ class Summary:
         balance_header = 'Budget Balance (Budget – (Comm & Exp))'
         col_names = [project_name_header, budget_header, expenses_header, balance_header]
 
+        project_type_header = 'Project Type'
+
         # used to distinguish CS-specific accounts that all have the same project name of
         # "David Doty ENGR COMPUTER SCIENCE PPM Only"
         # In these cases we grab the Task name and used that as the project name instead
@@ -177,7 +179,7 @@ class Summary:
         summary_col_idxs = {}
         for i, cell in enumerate(header_row):
             header = cell.value
-            if header in col_names + [task_header]:
+            if header in col_names + [task_header] + [project_type_header]:
                 summary_col_idxs[header] = i
 
         project_names = []
@@ -209,20 +211,30 @@ class Summary:
             )
             find_expenses_by_category(summary, ws_detail, project_name_header, project_name)
 
-            clean_project_name = project_name
-            # TODO: replace this with a check for Project Type = Internal (vs. Sponsored)
-            if 'PPM Only' in project_name:
-                # replace with more specific task name
-                clean_project_name = row[summary_col_idxs[task_header]].value
-
-            clean_project_name = remove_suffix_starting_with(clean_project_name, suffixes_to_clean)
-            clean_project_name = remove_substrings(clean_project_name, substrings_to_clean)
-            clean_project_name = clean_whitespace(clean_project_name)
-
             if project_name in project_names:
                 raise ValueError(f'There are duplicates in the project names: "{project_name}" appears in two '
                                  f'different rows of the Summary worksheet of the Excel file "{fn}". '
                                  f'I do not know how to process such a file.')
+
+
+            # Internal project names are typically of the form "David Doty ENGR COMPUTER SCIENCE PPM Only"
+            # so we replace those with the more specific task name such as
+            # "CS INDIRECT COST RETURN DOTY DEFAULT PROJECT 13U00" or
+            # "CS DISCRETIONARY FUNDS DOTY DEFAULT PROJECT 13U00"
+            project_type = row[summary_col_idxs[project_type_header]].value
+            assert project_type in ['Internal', 'Sponsored']
+            internal = project_type == 'Internal'
+            if internal:
+                if 'PPM Only' not in project_name:
+                    print("WARNING: Internal project name typically contain the phrase 'PPM Only'; "
+                          f'double-check that project "{project_name}" is internal and is the correct project name.')
+                # replace with more specific task name
+                project_name = row[summary_col_idxs[task_header]].value
+
+            clean_project_name = project_name
+            clean_project_name = remove_suffix_starting_with(clean_project_name, suffixes_to_clean)
+            clean_project_name = remove_substrings(clean_project_name, substrings_to_clean)
+            clean_project_name = clean_whitespace(clean_project_name)
 
             if clean_project_name in clean_name_to_orig.keys():
                 # check if iterable suffixes_to_clean is empty

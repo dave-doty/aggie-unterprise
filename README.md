@@ -147,8 +147,9 @@ due to the particular manner in which someone mashed their forearm against the k
 
 ## Standalone program
 If you do not want to install Python or write Python code, there is a standalone command-line program called aggie-report that can do some basic tasks. There are pre-compiled versions of aggie-report you can download:
-- [Windows](dist_win/aggie_report.exe?raw=1)
-- [Linux](dist_linux/aggie_report?raw=1)
+- [Windows](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-windows.exe)
+- [Linux](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-linux)
+- [macOS](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-mac)
 
 After downloading it, run `aggie-report -h` to see all the options.
 

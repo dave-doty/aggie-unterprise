@@ -16,9 +16,6 @@ def format_currency(amount: float) -> str:
     return f"${amount:,.2f}" if amount >= 0 else f"-${abs(amount):,.2f}"
 
 
-# TODO:
-
-
 # TODO: don't hardcode header rows; search for them instead
 
 summary_header_row_idx = 17
@@ -115,7 +112,7 @@ POSSIBLE_HEADERS = ['Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fello
 @dataclass
 class Summary:
     """
-    A summary of all the projects in the AggieEnterprise Excel file create by following [these instructions](
+    A summary of all the projects in the AggieEnterprise Excel file created by following [these instructions](
     https://servicehub.ucdavis.edu/servicehub?id=ucd_kb_article&sys_id=cc1942f61b32c6d80e0b2068b04bcbbf).
 
     Create a Summary object by calling [`Summary.from_file`][aggie_unterprise.Summary.from_file]
@@ -183,7 +180,9 @@ class Summary:
             if header in col_names + [task_header]:
                 summary_col_idxs[header] = i
 
+        project_names = []
         project_summaries = []
+        clean_name_to_orig = {}
         for row in ws_summary.iter_rows(min_row=summary_header_row_idx + 1):
             project_name = row[summary_col_idxs[project_name_header]].value
             budget = row[summary_col_idxs[budget_header]].value
@@ -219,9 +218,30 @@ class Summary:
             clean_project_name = remove_suffix_starting_with(clean_project_name, suffixes_to_clean)
             clean_project_name = remove_substrings(clean_project_name, substrings_to_clean)
             clean_project_name = clean_whitespace(clean_project_name)
+
+            if project_name in project_names:
+                raise ValueError(f'There are duplicates in the project names: "{project_name}" appears in two '
+                                 f'different rows of the Summary worksheet of the Excel file "{fn}". '
+                                 f'I do not know how to process such a file.')
+
+            if clean_project_name in clean_name_to_orig.keys():
+                # check if iterable suffixes_to_clean is empty
+                first_orig_project_name = clean_name_to_orig[clean_project_name]
+                if any(True for _ in suffixes_to_clean) or any(True for _ in substrings_to_clean):
+                    msg = (f'Warning: After: cleaning up the project names, there are duplicates.'
+                           f'The original project names "{first_orig_project_name}" and "{project_name}" '
+                           f'both map to the cleaned project name {clean_project_name}. '
+                           f'Try specifying different values in `substrings_to_clean` or `suffixes_to_clean`.')
+                    raise ValueError(msg)
+                else:
+                    url = r'https://github.com/dave-doty/aggie-unterprise/issues'
+                    assert f'Should be unreachable; report this error to the aggie_unterprise issues page: {url}'
+            project_names.append(clean_project_name)
+
             summary.project_name = clean_project_name
 
             project_summaries.append(summary)
+            clean_name_to_orig[clean_project_name] = project_name
 
         return Summary(project_summaries, date)
 
@@ -287,6 +307,12 @@ class Summary:
         """
         Return a string representation of the differences between this summary and `summary_earlier`.
 
+        Any project listed in one summary but not the other will be treated as though the other summary
+        had a ProjectSummary object with all fields set to 0. For instance, if a new grant was added to the
+        later summary, the row for that project will show all the fields as the amounts in the later summary.
+        If a grant was removed from the later summary, the row for that project will show all the fields as
+        the negative of the amounts in the earlier summary.
+
         Args:
             summary_earlier: The earlier [`Summary`][aggie_unterprise.Summary] object to compare against
 
@@ -309,8 +335,22 @@ class Summary:
             if header not in POSSIBLE_HEADERS:
                 raise ValueError(f"Invalid heading: {header}; must be one of {', '.join(POSSIBLE_HEADERS)}")
 
+        # some projects may have been added or removed between the two summaries
+        # in these cases we will let the diff between a project in one that is missing from the other
+        # be as though the other had the ProjectSummary but with all fields set to 0
+        names_to_projects_later = {summary.project_name: summary for summary in self.project_summaries}
+        names_to_projects_earlier = {summary.project_name: summary for summary in summary_earlier.project_summaries}
+        names_only_earlier = [name for name in names_to_projects_earlier if name not in names_to_projects_earlier]
+        all_project_names = list(names_to_projects_later.keys()) + names_only_earlier
+
         table = []
-        for (summary_later, summary_earlier) in zip(self.project_summaries, summary_earlier.project_summaries):
+        for project_name in all_project_names:
+            assert project_name in names_to_projects_later or project_name in names_to_projects_earlier
+            null_project_summary = ProjectSummary(project_name=project_name)
+            summary_later = names_to_projects_later.get(project_name, null_project_summary)
+            summary_earlier = names_to_projects_earlier.get(project_name, null_project_summary)
+            assert summary_later is not null_project_summary or summary_earlier is not null_project_summary
+
             if summary_later.project_name != summary_earlier.project_name:
                 raise ValueError("Can't diff summaries with different project names")
             diff = summary_later.diff(summary_earlier)
@@ -372,33 +412,33 @@ class ProjectSummary:
     """Name of the project. Comes from the column "Project Name" if the project is sponsored 
     (through an external grant) and from the column "Task/Subtask Name" if the project is internal."""
 
-    balance: float
+    balance: float = 0
     """The balance of the project. Comes from the column "Budget Balance (Budget – (Comm & Exp))"."""
 
-    budget: float
+    budget: float = 0
     """The total budget of the project. Comes from the column "Budget"."""
 
-    expenses: float
+    expenses: float = 0
     """The total expenses of the project. Comes from the column "Expenses" The other specific types of expenses
     (salary, travel, etc.) should add up to this number."""
 
-    salary: float
+    salary: float = 0
     """The salary expenses of the project. Comes from the column "Salaries and Wages" in the Detail worksheet."""
 
-    travel: float
+    travel: float = 0
     """The travel expenses of the project. Comes from the column "Travel" in the Detail worksheet."""
 
-    supplies: float
+    supplies: float = 0
     """The supplies expenses of the project. Comes from the column "Supplies / Services / Other Expenses" 
     in the Detail worksheet."""
 
-    fringe: float
+    fringe: float = 0
     """The fringe benefits expenses of the project. Comes from the column "Fringe Benefits" in the Detail worksheet."""
 
-    fellowship: float
+    fellowship: float = 0
     """The fellowship and scholarships expenses of the project. Comes from the column "Fellowship & Scholarships"""
 
-    indirect: float
+    indirect: float = 0
     """The indirect costs of the project. Comes from the column "Indirect Costs" in the Detail worksheet."""
 
     def diff(self, other: ProjectSummary) -> ProjectSummary:

@@ -112,7 +112,8 @@ POSSIBLE_HEADERS = ['Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fello
 @dataclass
 class Summary:
     """
-    A summary of all the projects in the AggieEnterprise Excel file.
+    A summary of all the projects in the AggieEnterprise Excel file create by following
+    [these instructions](https://servicehub.ucdavis.edu/servicehub?id=ucd_kb_article&sys_id=cc1942f61b32c6d80e0b2068b04bcbbf).
 
     Create a Summary object by calling [`Summary.from_file`][aggie_unterprise.Summary.from_file]
     with the filename of the Excel file:

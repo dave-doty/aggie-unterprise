@@ -153,7 +153,7 @@ If you do not want to install Python or write Python code, there is a standalone
 
 Open a command prompt in the directory where you saved the file and run `aggie-report -h` to see all the options.
 
-If neither of those work or if you have a Mac, you can [install Python](https://www.python.org/downloads/), install the package by typing `pip install aggie_unterprise`. After doing this, you should have a program named `aggie-report` you can use:
+Alternately, you can [install Python](https://www.python.org/downloads/), install the package by typing `pip install aggie_unterprise`. After doing this, you will have a program named `aggie-report` you can use from any directory:
 
 ```
 $ aggie-report -d reports

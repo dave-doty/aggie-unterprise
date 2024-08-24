@@ -32,12 +32,12 @@ The aggie_unterprise Python package helps you, the **AGGIE**, to **UN**do this e
 
 ## Installation
 
-There are two options:
+<!-- There are two options: -->
 
-1. **pip** (the easy way)
-    At the command line, type `pip install aggie_unterprise`. This assumes you have [Python](https://www.python.org/) and [pip](https://pip.pypa.io/en/stable/installation/) installed.
+<!-- 1. **pip** (the easy way) -->
+At the command line, type `pip install aggie_unterprise`. This assumes you have [Python](https://www.python.org/) and [pip](https://pip.pypa.io/en/stable/installation/) installed.
 
-2. **less easy way** (in case pip installation doesn't work)
+<!-- 2. **less easy way** (in case pip installation doesn't work)
     
     Clone the repo and use as a local package:
     
@@ -51,7 +51,7 @@ There are two options:
     ![](images/env-var-set.png)\
     In Linux/Mac, using the bash shell, this can be done by adding the line `PYTHONPATH=$PYTHONPATH:/mnt/c/git/aggie-enterprise` to the file `.bashrc` in your home directory.
     
-    4. **Test**: Open a Python interpreter or Jupyter notebook and type `import aggie_unterprise`; it should import without errors.
+    4. **Test**: Open a Python interpreter or Jupyter notebook and type `import aggie_unterprise`; it should import without errors. -->
 
 
 

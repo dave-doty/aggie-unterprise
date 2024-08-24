@@ -131,7 +131,7 @@ due to the particular manner in which someone mashed their palm against the keyb
 
 ## Standalone program
 If you do not want to install Python or write Python code, there is a standalone command-line program called aggie-report that can do some basic tasks. There are pre-compiled versions of aggie-report you can download:
-- [Windows](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-windows.exe) (save with file name `aggie-report.exe`)
+- [Windows](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-win.exe) (save with file name `aggie-report.exe`)
 - [Linux](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-linux) (save with file name `aggie-report`)
 - [macOS](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-mac) (save with file name `aggie-report`)
 

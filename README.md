@@ -15,6 +15,8 @@ This document is intended to be read on [github](https://github.com/dave-doty/ag
 
 Type `pip install aggie_unterprise` at a command prompt. This assumes you have [Python](https://www.python.org/) and [pip](https://pip.pypa.io/en/stable/installation/) installed.
 
+If you don't want to install Python or write Python code, some functionality is available through a downloadable [standalone program](#standalone-program).
+
 
 ## Overview
 This is an example of a useful summary of research grant funds:

@@ -216,7 +216,6 @@ class Summary:
                                  f'different rows of the Summary worksheet of the Excel file "{fn}". '
                                  f'I do not know how to process such a file.')
 
-
             # Internal project names are typically of the form "David Doty ENGR COMPUTER SCIENCE PPM Only"
             # so we replace those with the more specific task name such as
             # "CS INDIRECT COST RETURN DOTY DEFAULT PROJECT 13U00" or

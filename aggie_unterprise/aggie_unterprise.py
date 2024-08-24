@@ -221,6 +221,7 @@ class Summary:
             # so we replace those with the more specific task name such as
             # "CS INDIRECT COST RETURN DOTY DEFAULT PROJECT 13U00" or
             # "CS DISCRETIONARY FUNDS DOTY DEFAULT PROJECT 13U00"
+
             project_type = row[summary_col_idxs[project_type_header]].value
             assert project_type in ['Internal', 'Sponsored']
             internal = project_type == 'Internal'

@@ -165,7 +165,7 @@ Assuming you have a subdirectory `reports` of your current directory with your A
 The other options are as follows, but in case this documentation gets outdated, run `aggie-report -h` to see the latest options:
 
 ```
-usage: aggie_report [-h] [-d DIRECTORY | -f FILE [FILE ...]] [-o OUTFILE] [-nd | -ni] 
+usage: aggie-report [-h] [-d DIRECTORY | -f FILE [FILE ...]] [-o OUTFILE] [-nd | -ni] 
 [-s] [-sb SUBSTRING [SUBSTRING ...]] [-sf SUFFIX [SUFFIX ...]] 
 [-sbf SUBSTRINGS_FILE] [-sff SUFFIXES_FILE]
 

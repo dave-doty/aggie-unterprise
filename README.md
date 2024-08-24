@@ -61,7 +61,8 @@ Suppose you have generated a spreadsheet from AggieEnterprise named `2024-8-1.xl
 ```python
 from aggie_unterprise import Summary
 summary = Summary.from_file('2024-8-1.xlsx')
-print(f'Totals for {summary.month()} {summary.year()}\n{summary}')
+print(f'Totals for {summary.month()} {summary.year()}')
+print(summary)
 ```
 
 will print something like this:
@@ -89,7 +90,7 @@ from aggie_unterprise import Summary
 summary_aug = Summary.from_file('2024-8-1.xlsx')
 summary_jul = Summary.from_file('2024-7-1.xlsx')
 print(f'Difference between {summary_aug.month()} and {summary_jul.month()}')
-print(f'{summary_aug.diff_table(summary_jul)}')
+print(summary_aug.diff_table(summary_jul))
 ```
 
 ```

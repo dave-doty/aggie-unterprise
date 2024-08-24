@@ -17,7 +17,7 @@ jobs:
             dist_name: linux
             file_extension: ""
           - os: windows-latest
-            dist_name: windows
+            dist_name: win
             file_extension: ".exe"
           - os: macos-latest
             dist_name: mac

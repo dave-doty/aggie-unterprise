@@ -265,7 +265,7 @@ class Summary:
 
     def table(self, tablefmt: str = 'rounded_outline', headers: Optional[Iterable[str]] = None) -> str:
         """
-        Return a string representation of the summary as a string in tabular form.
+        Return a representation of the summary as a string in tabular form.
 
         Args:
             tablefmt: The format of the table; see the Python package\
@@ -278,7 +278,7 @@ class Summary:
                 If not specified, all headers will be included in the default order.
 
         Returns:
-            A string representation of the summary as a string in tabular form
+            A representation of the summary as a string in tabular form
         """
         if headers is None:
             headers = POSSIBLE_HEADERS
@@ -317,7 +317,7 @@ class Summary:
     def diff_table(self, summary_earlier: Summary, tablefmt: str = 'rounded_outline',
                    headers: Optional[Iterable[str]] = None) -> str:
         """
-        Return a string representation of the differences between this summary and `summary_earlier`.
+        Return a representation of the differences between this summary and `summary_earlier`.
 
         Any project listed in one summary but not the other will be treated as though the other summary
         had a ProjectSummary object with all fields set to 0. For instance, if a new grant was added to the
@@ -339,7 +339,7 @@ class Summary:
                 If not specified, all headers will be included in the default order.
 
         Returns:
-            A string representation of the summary of differences as a string in tabular form
+            A representation of the summary of differences as a string in tabular form
         """
         if headers is None:
             headers = POSSIBLE_HEADERS

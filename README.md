@@ -121,7 +121,7 @@ suffixes = ['K3023', 'DOTY DEFAULT PROJECT 13U00']
 substrings = ['Doty', 'CS ']
 summary_aug = Summary.from_file('2024-8-1.xlsx', substrings_to_clean=substrings, suffixes_to_clean=suffixes)
 ```
-due to the particular manner in which someone mashed their forearm against the keyboard to generate the alien-looking project names of my own grants (e.g. "*CS NSF DNA and RNA Partic Support Doty K3023EDRNA*"), but you will want to customize according to the shape of your SPO representative's forearm.
+due to the particular manner in which someone mashed their palm against the keyboard to generate the alien-looking project names of my own grants (e.g. "*CS NSF DNA and RNA Partic Support Doty K3023EDRNA*"), but you will want to customize according to the shape of your SPO representative's palm.
 
 ## API
 [API documentation](https://aggie-unterprise.readthedocs.io/).

@@ -46,7 +46,7 @@ def remove_substrings(string: str, substrings: Iterable[str]) -> str:
     # subsubstring "a" first changes the other substring "abc" to "bc"
     for i, sub1 in enumerate(substrings):
         for j in range(i + 1, len(substrings)):
-            sub2 = substrings[j]
+            sub2 = substrings[j]  # type: ignore #PyCharm thinks list has no [] operator
             if sub1 in sub2:
                 substrings[i], substrings[j] = sub2, sub1
 

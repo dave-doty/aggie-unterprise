@@ -1,4 +1,4 @@
-# Welcome to aggie_unterprise
+# aggie_unterprise API
 
 This is the API documentation for aggie_unterprise. 
 See the [Github page](https://github.com/dave-doty/aggie-unterprise#readme)

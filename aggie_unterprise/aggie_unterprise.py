@@ -399,7 +399,7 @@ class Summary:
         """The day of the summary (as an integer)"""
         return self.date_and_time.day
 
-    
+
 @dataclass
 class ProjectSummary:
     """

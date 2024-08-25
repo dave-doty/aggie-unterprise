@@ -1,10 +1,10 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Iterable, Union, List, Optional
+from typing import Iterable, List, Dict, Optional, Union, cast
 from pathlib import Path
 from openpyxl import load_workbook
 from tabulate import tabulate
-from datetime import datetime
+import datetime
 import calendar
 
 
@@ -99,10 +99,10 @@ def find_expenses_by_category(summary: ProjectSummary, ws_detail, project_name_h
                 print(f"Unknown category {category}; consider adding it to the list of categories?")
 
 
-def extract_date(ws_summary) -> datetime.date:
+def extract_date(ws_summary) -> datetime.datetime:
     raw = ws_summary[date_cell].value
     raw = raw.replace('Report Run Date:', '').strip()
-    date_and_time = datetime.strptime(raw, '%Y-%m-%d %I:%M:%S %p')
+    date_and_time = datetime.datetime.strptime(raw, '%Y-%m-%d %I:%M:%S %p')
     return date_and_time
 
 
@@ -127,12 +127,12 @@ class Summary:
     """A list of [`ProjectSummary`][aggie_unterprise.ProjectSummary]'s, one for each project found in the
     AggieEnterprise Excel file read by [`Summary.from_file`][aggie_unterprise.Summary.from_file]"""
 
-    date_and_time: datetime
+    date_and_time: datetime.datetime
     """The date and time the summary was generated"""
 
     @staticmethod
     def from_file(
-            fn: Union[Path, str],
+            fn: Union[str, Path],
             substrings_to_clean: Iterable[str] = (),
             suffixes_to_clean: Iterable[str] = (),
     ) -> Summary:
@@ -159,7 +159,7 @@ class Summary:
         ws_summary = wb['Summary']
         ws_detail = wb['Detail']
 
-        date = extract_date(ws_summary)
+        date_report_created = extract_date(ws_summary)
 
         header_row = ws_summary[summary_header_row_idx]
         assert header_row[0].value == "Award Number"
@@ -184,31 +184,20 @@ class Summary:
 
         project_names = []
         project_summaries = []
-        clean_name_to_orig = {}
+        clean_name_to_orig: Dict[str, str] = {}
         for row in ws_summary.iter_rows(min_row=summary_header_row_idx + 1):
-            project_name = row[summary_col_idxs[project_name_header]].value
-            budget = row[summary_col_idxs[budget_header]].value
-            expenses = row[summary_col_idxs[expenses_header]].value
-            balance = row[summary_col_idxs[balance_header]].value
-            if None in [project_name, budget, expenses]:
+            project_name: str = cast(str, row[summary_col_idxs[project_name_header]].value)
+            budget_str: str = cast(str, row[summary_col_idxs[budget_header]].value)
+            expenses_str: str = cast(str, row[summary_col_idxs[expenses_header]].value)
+            balance_str: str = cast(str, row[summary_col_idxs[balance_header]].value)
+            if None in [project_name, budget_str, expenses_str]:
                 # some rows are empty; skip them
                 continue
 
-            budget = float(budget)
-            expenses = float(expenses)
-            balance = float(balance)
-            summary = ProjectSummary(
-                project_name=project_name,
-                balance=balance,
-                budget=budget,
-                expenses=expenses,
-                salary=0,
-                travel=0,
-                supplies=0,
-                fringe=0,
-                fellowship=0,
-                indirect=0,
-            )
+            budget = float(budget_str)
+            expenses = float(expenses_str)
+            balance = float(balance_str)
+            summary = ProjectSummary(project_name=project_name, balance=balance, budget=budget, expenses=expenses)
             find_expenses_by_category(summary, ws_detail, project_name_header, project_name)
 
             if project_name in project_names:
@@ -229,7 +218,7 @@ class Summary:
                     print("WARNING: Internal project name typically contain the phrase 'PPM Only'; "
                           f'double-check that project "{project_name}" is internal and is the correct project name.')
                 # replace with more specific task name
-                project_name = row[summary_col_idxs[task_header]].value
+                project_name = cast(str, row[summary_col_idxs[task_header]].value)
 
             clean_project_name = project_name
             clean_project_name = remove_suffix_starting_with(clean_project_name, suffixes_to_clean)
@@ -255,7 +244,7 @@ class Summary:
             project_summaries.append(summary)
             clean_name_to_orig[clean_project_name] = project_name
 
-        return Summary(project_summaries, date)
+        return Summary(project_summaries, date_report_created)
 
     def __str__(self) -> str:
         return self.table()
@@ -309,8 +298,8 @@ class Summary:
                     row[i] = row[i].replace('$', r'\$')  # type:ignore #PyCharm thinks list has no [] operator
             table.append(row)
 
-        new_headers = ['Project Name'] + headers
-        colalign = ['left'] + ['right'] * len(headers)
+        new_headers = ['Project Name'] + list(headers)
+        colalign = ['left'] + ['right'] * (len(new_headers) - 1)
         table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt, colalign=colalign)
         return table_tabulated
 
@@ -343,6 +332,7 @@ class Summary:
         """
         if headers is None:
             headers = POSSIBLE_HEADERS
+        headers = list(headers)
         for header in headers:
             if header not in POSSIBLE_HEADERS:
                 raise ValueError(f"Invalid heading: {header}; must be one of {', '.join(POSSIBLE_HEADERS)}")
@@ -359,13 +349,13 @@ class Summary:
         for project_name in all_project_names:
             assert project_name in names_to_projects_later or project_name in names_to_projects_earlier
             null_project_summary = ProjectSummary(project_name=project_name)
-            summary_later = names_to_projects_later.get(project_name, null_project_summary)
-            summary_earlier = names_to_projects_earlier.get(project_name, null_project_summary)
-            assert summary_later is not null_project_summary or summary_earlier is not null_project_summary
+            proj_summary_later = names_to_projects_later.get(project_name, null_project_summary)
+            proj_summary_earlier = names_to_projects_earlier.get(project_name, null_project_summary)
+            assert proj_summary_later is not null_project_summary or proj_summary_earlier is not null_project_summary
 
-            if summary_later.project_name != summary_earlier.project_name:
+            if proj_summary_later.project_name != proj_summary_earlier.project_name:
                 raise ValueError("Can't diff summaries with different project names")
-            diff = summary_later.diff(summary_earlier)
+            diff = proj_summary_later.diff(proj_summary_earlier)
             header_to_field = {
                 'Expenses': diff.expenses,
                 'Salary': diff.salary,
@@ -393,6 +383,8 @@ class Summary:
         num_expense_cols = len(headers) - 1 if 'Budget' in headers else len(headers)
         colalign = ['left'] + ['right'] * num_expense_cols
         table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt, colalign=colalign)
+        # TODO: when tabulate updates to verion 0.9.1, uncomment the following line
+        # ,colglobalalign='left')
         return table_tabulated
 
     def year(self) -> int:
@@ -407,11 +399,7 @@ class Summary:
         """The day of the summary (as an integer)"""
         return self.date_and_time.day
 
-    def date(self) -> datetime.date:
-        """The date of the summary (as a datetime.date object)"""
-        return self.date_and_time.date()
-
-
+    
 @dataclass
 class ProjectSummary:
     """

@@ -1,4 +1,4 @@
-Steps:
+Steps: (This is now handled by a GitHub action, but this is how we did it manually before setting up that action.)
 
 **Skip to step 2 if you've done step 1 once in the past
 1. Create clean virtualenv (this avoids some problem with pathlib):

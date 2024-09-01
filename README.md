@@ -15,7 +15,7 @@ This document is intended to be read on [github](https://github.com/dave-doty/ag
 
 This assumes you have [Python](https://www.python.org/) installed (and [pip](https://pip.pypa.io/en/stable/installation/), which comes with Python unless you have a very old Python distribution). At a command prompt (e.g., cmd or Powershell in Windows, terminal in Linux or Max), type 
 ```
-pip install aggie_unterprise
+pip install aggie-unterprise
 ````
 If you don't want to install Python or write Python code, some functionality is available through a downloadable [standalone program](#standalone-program).
 

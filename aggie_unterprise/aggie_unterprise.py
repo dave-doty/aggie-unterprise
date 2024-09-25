@@ -403,7 +403,7 @@ class Summary:
 @dataclass
 class ProjectSummary:
     """
-    Objecting summarizing a single project, with a name and several dollar amounts gathered from the
+    Object summarizing a single project, with a name and several dollar amounts gathered from the
     AggieEnterprise Excel file when the ProjectSummary object is constructed when calling
     [`Summary.from_file`][aggie_unterprise.Summary.from_file].
     """

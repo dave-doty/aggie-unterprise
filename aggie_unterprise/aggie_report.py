@@ -52,7 +52,7 @@ def main():
 
 def print_diff_summary(file: TextIO, sum_prev: Summary, sum_next: Summary) -> None:
     print(f'\nDifferences from {sum_prev.date()} to {sum_next.date()}:', file=file)
-    print(sum_prev.diff_table(sum_next), file=file)
+    print(sum_next.diff_table(sum_prev), file=file)
 
 
 def print_indv_summary(file: TextIO, sum_prev: Summary) -> None:

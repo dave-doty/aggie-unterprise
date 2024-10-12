@@ -1,6 +1,6 @@
 [project]
 name = "aggie-unterprise"
-version = "1.0.5"
+version = "1.0.6"
 description = "A Python package for extracting and processing grant data from AggieEnterprise spreadsheets."
 authors = [
     { name="Dave Doty", email="doty@ucdavis.edu" }

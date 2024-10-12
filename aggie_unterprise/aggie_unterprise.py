@@ -130,6 +130,10 @@ class Summary:
     date_and_time: datetime.datetime
     """The date and time the summary was generated"""
 
+    def date(self) -> datetime.date:
+        """The date of the summary"""
+        return self.date_and_time.date()
+
     @staticmethod
     def from_file(
             fn: Union[str, Path],

@@ -26,7 +26,7 @@ def main():
     suffixes = combine_substrings_from_file(args.suffixes_file, args.suffixes_to_clean)
 
     summaries = [Summary.from_file(path, substrings_to_clean=substrings, suffixes_to_clean=suffixes) for path in paths]
-    summaries.sort(key=lambda s: s.date())
+    summaries.sort(key=lambda s: s.date_and_time)
     if not args.sort_increasing_by_date:
         summaries.reverse()
 
@@ -36,6 +36,8 @@ def main():
     file = open(args.outfile, 'w', encoding='utf-8') if args.outfile is not None else sys.stdout
     try:
         for sum_prev, sum_next in itertools.pairwise(summaries):
+            if not args.sort_increasing_by_date:
+                sum_prev, sum_next = sum_next, sum_prev
             if args.include_individual_summaries:
                 print_indv_summary(file, sum_prev)
             if args.include_diffs:

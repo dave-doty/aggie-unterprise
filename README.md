@@ -141,7 +141,7 @@ Open a command prompt in the directory where you saved the file.
 
 On Mac (respectively Linux), type `mv aggie-report-mac aggie-report` to rename the file to `aggie-report` (respectively `mv aggie-report-limux aggie-report` on Linux).
 
-On Mac and Linux, first type `chmod +x aggie-report` (after renaming the file to `aggie-report`) to make the program executable.
+On Mac and Linux, type `chmod +x aggie-report` (after renaming the file to `aggie-report`) to make the program executable.
 
 On Mac, you must then type `xattr -d com.apple.quarantine ./aggie-report` to enable the program to run.
 

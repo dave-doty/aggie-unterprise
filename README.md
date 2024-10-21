@@ -147,7 +147,7 @@ On Mac, you must then type `xattr -d com.apple.quarantine ./aggie-report` to ena
 
 Run `aggie-report -h` to see all the options.
 
-Alternately, you can [install Python](https://www.python.org/downloads/), install the package by typing `pip install aggie_unterprise`. After doing this, you will have a program named `aggie-report` you can use from any directory:
+Alternately, you can [install Python](https://www.python.org/downloads/), then install the package by typing `pip install aggie_unterprise`. After doing this, you will have a program named `aggie-report` you can use from any directory:
 
 ```
 $ aggie-report -d reports

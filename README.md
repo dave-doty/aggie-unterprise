@@ -195,28 +195,29 @@ options:
   -s, --sort-increasing-by-date
                         If specified, sort the files by date in increasing order instead 
                         of the default, which is to sort by date in decreasing order.
-  -sb SUBSTRING [SUBSTRING ...], --substrings SUBSTRING [SUBSTRING ...]
-                        List of substrings to remove from the project name. This can help 
-                        clean up ugly project names like "NSF CAREER K20304932" by 
-                        specifying substring "K20304932", which would change the project 
-                        name to "NSF CAREER".
-  -sf SUFFIX [SUFFIX ...], --suffixes SUFFIX [SUFFIX ...]
-                        List of substrings to remove from the project name, as well as 
-                        the entire suffix from there to the end. This can help clean up 
-                        ugly project names like "NSF CAREER K302777" and "NSF
-                        Small K302999" by specifying substring "K302", which would change 
-                        these project names "NSF CAREER" and "NSF Small".
-  -sbf SUBSTRINGS_FILE, --substrings-file SUBSTRINGS_FILE
-                        Filename containing substrings (separated by whitespace or 
-                        newlines) to remove from the project name. This is like the -sb 
+  --sb SUBSTRING [SUBSTRING ...], --substrings SUBSTRING [SUBSTRING ...]
+                        List of substrings to remove from the project name. This can
+                        help clean up ugly project names like "NSF CAREER K20304932"
+                        by specifying substring "K20304932", which would change the
+                        project name to "NSF CAREER".
+  --sf SUFFIX [SUFFIX ...], --suffixes SUFFIX [SUFFIX ...]
+                        List of substrings to remove from the project name, as well
+                        as the entire suffix from there to the end. This can help
+                        clean up ugly project names like "NSF CAREER K302777" and
+                        "NSF Small K302999" by specifying substring "K302", which
+                        would change these project names "NSF CAREER" and "NSF
+                        Small".
+  --sbf SUBSTRINGS_FILE, --substrings-file SUBSTRINGS_FILE
+                        Filename containing substrings (separated by whitespace or
+                        newlines) to remove from the project name. This is like the
+                        -sb option, but reads the substrings from a file so that you
+                        do not have to type them all out at the command line and can
+                        reuse them in multiple runs.
+  --ssf SUFFIXES_FILE, --suffixes-file SUFFIXES_FILE
+                        Filename containing substrings (separated by whitespace or
+                        newlines) to remove from the project name, as well as the
+                        entire suffix from there to the end. This is like the -sf
                         option, but reads the substrings from a file so that you do
-                        not have to type them all out at the command line and can reuse 
-                        them in multiple runs.
-  -sff SUFFIXES_FILE, --suffixes-file SUFFIXES_FILE
-                        Filename containing substrings (separated by whitespace or 
-                        newlines) to remove from the project name, as well as the entire 
-                        suffix from there to the end. This is like the -sf option,
-                        but reads the substrings from a file so that you do not have to 
-                        type them all out at the command line and can reuse them in 
-                        multiple runs.
+                        not have to type them all out at the command line and can
+                        reuse them in multiple runs.
 ```

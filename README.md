@@ -137,7 +137,15 @@ If you do not want to install Python or write Python code, there is a standalone
 - [Linux](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-linux) (save with file name `aggie-report`)
 - [macOS](https://github.com/dave-doty/aggie-unterprise/releases/latest/download/aggie-report-mac) (save with file name `aggie-report`)
 
-Open a command prompt in the directory where you saved the file and run `aggie-report -h` to see all the options.
+Open a command prompt in the directory where you saved the file.
+
+On Mac (respectively Linux), type `mv aggie-report-mac aggie-report` to rename then file to `aggie-report` (respectively `mv aggie-report-limux aggie-report` on Linux).
+
+On Mac and Linux, first type `chmod +x aggie-report` (after renaming the file to `aggie-report`) to make the program executable.
+
+On Mac, you must then type `xattr -d com.apple.quarantine ./aggie-report` to enable the program to run.
+
+Run `aggie-report -h` to see all the options.
 
 Alternately, you can [install Python](https://www.python.org/downloads/), install the package by typing `pip install aggie_unterprise`. After doing this, you will have a program named `aggie-report` you can use from any directory:
 

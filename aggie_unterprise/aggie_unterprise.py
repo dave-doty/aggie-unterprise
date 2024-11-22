@@ -93,6 +93,8 @@ def find_expenses_by_category(summary: ProjectSummary, ws_detail, project_name_h
                 summary.fringe = row[detail_col_idxs[detail_expenses_header]].value
             elif 'Fellowship & Scholarships' in category:
                 summary.fellowship = row[detail_col_idxs[detail_expenses_header]].value
+            elif 'Equipment and Facilities' in category:
+                summary.fellowship = row[detail_col_idxs[detail_expenses_header]].value
             elif 'Indirect Costs' in category:
                 summary.indirect = row[detail_col_idxs[detail_expenses_header]].value
             else:
@@ -288,6 +290,7 @@ class Summary:
                 'Supplies': project_summary.supplies,
                 'Fringe': project_summary.fringe,
                 'Fellowship': project_summary.fellowship,
+                'Equipment': project_summary.equipment,
                 'Indirect': project_summary.indirect,
                 'Balance': project_summary.balance,
                 'Budget': project_summary.budget,
@@ -367,6 +370,7 @@ class Summary:
                 'Supplies': diff.supplies,
                 'Fringe': diff.fringe,
                 'Fellowship': diff.fellowship,
+                'Equipment': diff.equipment,
                 'Indirect': diff.indirect,
                 'Balance': diff.balance,
             }
@@ -442,6 +446,9 @@ class ProjectSummary:
     fellowship: float = 0
     """The fellowship and scholarships expenses of the project. Comes from the column "Fellowship & Scholarships"""
 
+    equipment: float = 0
+    """The equipment expenses of the project. Comes from the column "Equipment & Facilities"""
+
     indirect: float = 0
     """The indirect costs of the project. Comes from the column "Indirect Costs" in the Detail worksheet."""
 
@@ -467,5 +474,6 @@ class ProjectSummary:
             supplies=self.supplies - other.supplies,
             fringe=self.fringe - other.fringe,
             fellowship=self.fellowship - other.fellowship,
+            equipment=self.equipment - other.equipment,
             indirect=self.indirect - other.indirect,
         )

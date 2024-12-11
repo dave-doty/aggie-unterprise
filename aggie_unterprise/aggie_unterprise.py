@@ -431,7 +431,8 @@ class ProjectSummary:
     (salary, travel, etc.) should add up to this number."""
 
     salary: float = 0
-    """The salary expenses of the project. Comes from the column "Salaries and Wages" in the Detail worksheet."""
+    """The salary expenses of the project. Comes from the column "Salaries and Wages" 
+    in the Detail worksheet."""
 
     travel: float = 0
     """The travel expenses of the project. Comes from the column "Travel" in the Detail worksheet."""
@@ -441,13 +442,16 @@ class ProjectSummary:
     in the Detail worksheet."""
 
     fringe: float = 0
-    """The fringe benefits expenses of the project. Comes from the column "Fringe Benefits" in the Detail worksheet."""
+    """The fringe benefits expenses of the project. Comes from the column "Fringe Benefits" 
+    in the Detail worksheet."""
 
     fellowship: float = 0
-    """The fellowship and scholarships expenses of the project. Comes from the column "Fellowship & Scholarships"""
+    """The fellowship and scholarships expenses of the project. Comes from the column 
+    "Fellowship & Scholarships" in the Detail worksheet."""
 
     equipment: float = 0
-    """The equipment expenses of the project. Comes from the column "Equipment & Facilities"""
+    """The equipment expenses of the project. Comes from the column "Equipment & Facilities"
+    in the Detail worksheet."""
 
     indirect: float = 0
     """The indirect costs of the project. Comes from the column "Indirect Costs" in the Detail worksheet."""

@@ -139,7 +139,7 @@ If you do not want to install Python or write Python code, there is a standalone
 
 Open a command prompt in the directory where you saved the file.
 
-On Mac (respectively Linux), type `mv aggie-report-mac aggie-report` to rename the file to `aggie-report` (respectively `mv aggie-report-limux aggie-report` on Linux).
+On Mac (respectively Linux), type `mv aggie-report-mac aggie-report` to rename the file to `aggie-report` (respectively `mv aggie-report-linux aggie-report` on Linux).
 
 On Mac and Linux, type `chmod +x aggie-report` (after renaming the file to `aggie-report`) to make the program executable.
 

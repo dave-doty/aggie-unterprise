@@ -24,14 +24,14 @@ If you don't want to install Python or write Python code, some functionality is 
 This is an example of a useful summary of research grant funds:
 
 ### Totals for August 2024
-| Project Name                       |     Expenses |       Salary |      Travel |   Supplies |      Fringe |   Fellowship |     Indirect |      Balance |       Budget |
-|------------------------------------|--------------|--------------|-------------|------------|-------------|--------------|--------------|--------------|--------------|
-| INDIRECT COST RETURN               |       \$0.00 |       \$0.00 |      \$0.00 |     \$0.00 |      \$0.00 |       \$0.00 |       \$0.00 |     \$904.00 |     \$904.00 |
-| DISCRETIONARY FUNDS                |       \$0.00 |       \$0.00 |      \$0.00 |     \$0.00 |      \$0.00 |       \$0.00 |       \$0.00 |   \$2,500.00 |   \$2,500.00 |
-| NSF Engineering DNA and RNA        |  \$61,316.61 |  \$34,800.00 |      \$0.00 |   \$133.40 |  \$3,263.70 |       \$0.00 |  \$23,119.51 | \$318,683.39 | \$380,000.00 |
-| NSF CAREER Chemical Computation    | \$468,000.72 | \$211,746.21 | \$33,334.25 | \$8,847.54 | \$58,519.35 |   \$5,166.81 | \$150,386.56 |  \$17,180.28 | \$485,181.00 |
-| REU CAREER Chemical Computation    |  \$44,062.63 |  \$43,180.29 |      \$0.00 |     \$0.00 |    \$882.34 |       \$0.00 |       \$0.00 |  \$18,750.37 |  \$62,813.00 |
-| DOE Office of Science Basic Energy |  \$15,045.49 |   \$8,642.86 |      \$0.00 |     \$0.00 |    \$760.57 |       \$0.00 |   \$5,642.06 |  \$51,372.51 |  \$66,418.00 |
+| Project Name                       |  Expenses |    Salary |   Travel |  Supplies |   Fringe |  Fellowship |  Indirect |   Balance |    Budget |
+|------------------------------------|-----------|-----------|----------|-----------|----------|-------------|-----------|-----------|-----------|
+| INDIRECT COST RETURN               |           |           |          |           |          |             |           |     \$904 |     \$904 |
+| DISCRETIONARY FUNDS                |           |           |          |           |          |             |           |   \$2,500 |   \$2,500 |
+| NSF Engineering DNA and RNA        |  \$61,316 |  \$34,800 |          |     \$133 |  \$3,263 |             |  \$23,119 | \$318,683 | \$380,000 |
+| NSF CAREER Chemical Computation    | \$468,000 | \$211,746 | \$33,334 |   \$8,847 | \$58,519 |     \$5,166 | \$150,386 |  \$17,180 | \$485,181 |
+| REU CAREER Chemical Computation    |  \$44,062 |  \$43,180 |          |           |    \$882 |             |           |  \$18,750 |  \$62,813 |
+| DOE Office of Science Basic Energy |  \$15,045 |   \$8,642 |          |           |    \$760 |             |   \$5,642 |  \$51,372 |  \$66,418 |
 
 [AggieEnterprise](https://aggieenterprise.ucdavis.edu/) is a software system used by [UC Davis](https://www.ucdavis.edu/), whose purpose is bury this useful information beneath mountains of gibberish, resulting in a spreadsheet filled with useless trash like this:
 
@@ -54,16 +54,16 @@ will print something like this:
 
 ```
 Totals for August 2024
-╭────────────────────────────────────┬─────────────┬─────────────┬────────────┬────────────┬────────────┬──────────────┬─────────────┬─────────────┬─────────────╮
-│ Project Name                       │    Expenses │      Salary │     Travel │   Supplies │     Fringe │   Fellowship │    Indirect │     Balance │      Budget │
-├────────────────────────────────────┼─────────────┼─────────────┼────────────┼────────────┼────────────┼──────────────┼─────────────┼─────────────┼─────────────┤
-│ INDIRECT COST RETURN               │       $0.00 │       $0.00 │      $0.00 │      $0.00 │      $0.00 │        $0.00 │       $0.00 │     $904.00 │     $904.00 │
-│ DISCRETIONARY FUNDS                │       $0.00 │       $0.00 │      $0.00 │      $0.00 │      $0.00 │        $0.00 │       $0.00 │   $2,500.00 │   $2,500.00 │
-│ NSF Engineering DNA and RNA        │  $61,316.61 │  $34,800.00 │      $0.00 │    $133.40 │  $3,263.70 │        $0.00 │  $23,119.51 │ $318,683.39 │ $380,000.00 │
-│ NSF CAREER Chemical Computation    │ $468,000.72 │ $211,746.21 │ $33,334.25 │  $8,847.54 │ $58,519.35 │    $5,166.81 │ $150,386.56 │  $17,180.28 │ $485,181.00 │
-│ REU CAREER Chemical Computation    │  $44,062.63 │  $43,180.29 │      $0.00 │      $0.00 │    $882.34 │        $0.00 │       $0.00 │  $18,750.37 │  $62,813.00 │
-│ DOE Office of Science Basic Energy │  $15,045.49 │   $8,642.86 │      $0.00 │      $0.00 │    $760.57 │        $0.00 │   $5,642.06 │  $51,372.51 │  $66,418.00 │
-╰────────────────────────────────────┴─────────────┴─────────────┴────────────┴────────────┴────────────┴──────────────┴─────────────┴─────────────┴─────────────╯
+╭────────────────────────────────────┬──────────┬──────────┬─────────┬──────────┬─────────┬────────────┬──────────┬──────────┬──────────╮
+│ Project Name                       │ Expenses │   Salary │  Travel │ Supplies │  Fringe │ Fellowship │ Indirect │  Balance │   Budget │
+├────────────────────────────────────┼──────────┼──────────┼─────────┼──────────┼─────────┼────────────┼──────────┼──────────┼──────────┤
+│ INDIRECT COST RETURN               │          │          │         │          │         │            │          │     $904 │     $904 │
+│ DISCRETIONARY FUNDS                │          │          │         │          │         │            │          │   $2,500 │   $2,500 │
+│ NSF Engineering DNA and RNA        │  $61,316 │  $34,800 │         │     $133 │  $3,263 │            │  $23,119 │ $318,683 │ $380,000 │
+│ NSF CAREER Chemical Computation    │ $468,000 │ $211,746 │ $33,334 │   $8,847 │ $58,519 │     $5,166 │ $150,386 │  $17,180 │ $485,181 │
+│ REU CAREER Chemical Computation    │  $44,062 │  $43,180 │         │          │    $882 │            │          │  $18,750 │  $62,813 │
+│ DOE Office of Science Basic Energy │  $15,045 │   $8,642 │         │          │    $760 │            │   $5,642 │  $51,372 │  $66,418 │
+╰────────────────────────────────────┴──────────┴──────────┴─────────┴──────────┴─────────┴────────────┴──────────┴──────────┴──────────╯
 ```
 
 The table summarizes expenses, broken down by type of expense, remaining balance, and original total budget, for each grant. These are the totals since the start of each grant. 
@@ -80,16 +80,16 @@ print(summary_aug.diff_table(summary_jul))
 
 ```
 Difference between August and July
-╭────────────────────────────────────┬────────────┬────────────┬───────────┬────────────┬───────────┬──────────────┬────────────┬─────────────╮
-│ Project Name                       │   Expenses │     Salary │    Travel │   Supplies │    Fringe │   Fellowship │   Indirect │     Balance │
-├────────────────────────────────────┼────────────┼────────────┼───────────┼────────────┼───────────┼──────────────┼────────────┼─────────────┤
-│ INDIRECT COST RETURN               │      $0.00 │      $0.00 │     $0.00 │      $0.00 │     $0.00 │        $0.00 │      $0.00 │       $0.00 │
-│ DISCRETIONARY FUNDS                │      $0.00 │      $0.00 │     $0.00 │      $0.00 │     $0.00 │        $0.00 │      $0.00 │       $0.00 │
-│ NSF Engineering DNA and RNA        │ $32,401.41 │ $18,300.00 │     $0.00 │     $13.40 │ $1,811.70 │        $0.00 │ $12,276.31 │ -$32,401.41 │
-│ NSF CAREER Chemical Computation    │ $14,347.87 │  $5,275.73 │ $3,504.27 │  $2,458.96 │   $100.24 │   -$3,826.31 │  $6,834.98 │  $62,178.13 │
-│ REU CAREER Chemical Computation    │      $0.00 │      $0.00 │     $0.00 │      $0.00 │     $0.00 │        $0.00 │      $0.00 │       $0.00 │
-│ DOE Office of Science Basic Energy │      $0.00 │      $0.00 │     $0.00 │      $0.00 │     $0.00 │        $0.00 │      $0.00 │       $0.00 │
-╰────────────────────────────────────┴────────────┴────────────┴───────────┴────────────┴───────────┴──────────────┴────────────┴─────────────╯
+╭────────────────────────────────────┬──────────┬─────────┬────────┬──────────┬────────┬────────────┬──────────┬──────────╮
+│ Project Name                       │ Expenses │  Salary │ Travel │ Supplies │ Fringe │ Fellowship │ Indirect │  Balance │
+├────────────────────────────────────┼──────────┼─────────┼────────┼──────────┼────────┼────────────┼──────────┼──────────┤
+│ INDIRECT COST RETURN               │          │         │        │          │        │            │          │          │
+│ DISCRETIONARY FUNDS                │          │         │        │          │        │            │          │          │
+│ NSF Engineering DNA and RNA        │  $32,401 │ $18,300 │        │      $13 │ $1,811 │            │  $12,276 │ -$32,401 │
+│ NSF CAREER Chemical Computation    │  $14,347 │  $5,275 │ $3,504 │   $2,458 │   $100 │    -$3,826 │   $6,834 │  $62,178 │
+│ REU CAREER Chemical Computation    │          │         │        │          │        │            │          │          │
+│ DOE Office of Science Basic Energy │          │         │        │          │        │            │          │          │
+╰────────────────────────────────────┴──────────┴─────────┴────────┴──────────┴────────┴────────────┴──────────┴──────────╯
 ```
 
 In the diff table, one would normally expect each entry under Balance (which represents a change in balance from July to August) to be the negative of the entry under Expenses (total amount of expenses between July and August), as in the project "NSF Engineering DNA and RNA". However, sometimes a grant agency will deposit new funds in between the dates (as happened in the "NSF CAREER Chemical Computation" entry above), so the change in balance and change in expenses are not always negatives of each other.

@@ -220,4 +220,6 @@ options:
                         option, but reads the substrings from a file so that you do
                         not have to type them all out at the command line and can
                         reuse them in multiple runs.
+  -c, --show-cents      If specified, show dollar amounts including cents; default 
+                        behavior is to round to the nearest dollar.
 ```

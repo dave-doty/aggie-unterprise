@@ -8,12 +8,17 @@ import datetime
 import calendar
 
 
-def format_currency(amount: float) -> str:
+def format_currency(amount: float, show_cents: bool) -> str:
     # The "proper" way to do this is with the locale module,
     # but you need the system to have certain locales installed,
     # and I don't want users to run into those stupid errors,
     # so we just manually format the currency.
-    return f"${amount:,.2f}" if amount >= 0 else f"-${abs(amount):,.2f}"
+    if amount == 0.0:
+        return ''
+    if show_cents:
+        return f"${amount:,.2f}" if amount >= 0 else f"-${abs(amount):,.2f}"
+    else:
+        return f"${amount:,.0f}" if amount >= 0 else f"-${abs(amount):,.0f}"
 
 
 # TODO: don't hardcode header rows; search for them instead
@@ -258,7 +263,8 @@ class Summary:
     def __repr__(self) -> str:
         return self.table()
 
-    def table(self, tablefmt: str = 'rounded_outline', headers: Optional[Iterable[str]] = None) -> str:
+    def table(self, tablefmt: str = 'rounded_outline', headers: Optional[Iterable[str]] = None,
+              show_cents: bool = False) -> str:
         """
         Return a representation of the summary as a string in tabular form.
 
@@ -271,6 +277,9 @@ class Summary:
                 The headers will be displayed in the order they are given, so is also a way to reorder them
                 from the default order even if you include all of them.
                 If not specified, all headers will be included in the default order.
+
+            show_cents: Whether to show cents in the output.
+                If False, amounts will be rounded to the nearest dollar.
 
         Returns:
             A representation of the summary as a string in tabular form
@@ -297,7 +306,7 @@ class Summary:
             }
             row = [project_summary.project_name]
             for header in headers:
-                row.append(format_currency(header_to_field[header]))
+                row.append(format_currency(header_to_field[header], show_cents))
 
             if tablefmt in MARKDOWN_TABLE_FORMATS:
                 # escape $ so markdown does not interpret it as Latex
@@ -311,7 +320,7 @@ class Summary:
         return table_tabulated
 
     def diff_table(self, summary_earlier: Summary, tablefmt: str = 'rounded_outline',
-                   headers: Optional[Iterable[str]] = None) -> str:
+                   headers: Optional[Iterable[str]] = None, show_cents: bool = False) -> str:
         """
         Return a representation of the differences between this summary and `summary_earlier`.
 
@@ -333,6 +342,9 @@ class Summary:
                 The headers will be displayed in the order they are given, so is also a way to reorder them
                 from the default order even if you include all of them.
                 If not specified, all headers will be included in the default order.
+
+            show_cents: Whether to show cents in the output.
+                If False, amounts will be rounded to the nearest dollar.
 
         Returns:
             A representation of the summary of differences as a string in tabular form
@@ -378,7 +390,7 @@ class Summary:
             for header in headers:
                 if header == 'Budget':  # don't show budget diff since it's always equal between two summaries
                     continue
-                row.append(format_currency(header_to_field[header]))
+                row.append(format_currency(header_to_field[header], show_cents))
 
             if tablefmt in MARKDOWN_TABLE_FORMATS:
                 # escape $ so markdown does not interpret it as Latex

@@ -39,25 +39,25 @@ def main():
             if not args.sort_increasing_by_date:
                 sum_prev, sum_next = sum_next, sum_prev
             if args.include_individual_summaries:
-                print_indv_summary(file, sum_prev if args.sort_increasing_by_date else sum_next)
+                print_indv_summary(file, sum_prev if args.sort_increasing_by_date else sum_next, args.show_cents)
             if args.include_diffs:
-                print_diff_summary(file, sum_prev, sum_next)
+                print_diff_summary(file, sum_prev, sum_next, args.show_cents)
         if args.include_individual_summaries:
             last_summary = summaries[-1]
-            print_indv_summary(file, last_summary)
+            print_indv_summary(file, last_summary, args.show_cents)
     finally:
         if file is not sys.stdout:
             file.close()
 
 
-def print_diff_summary(file: TextIO, sum_prev: Summary, sum_next: Summary) -> None:
+def print_diff_summary(file: TextIO, sum_prev: Summary, sum_next: Summary, show_cents: bool) -> None:
     print(f'\nDifferences from {sum_prev.date()} to {sum_next.date()}:', file=file)
-    print(sum_next.diff_table(sum_prev), file=file)
+    print(sum_next.diff_table(sum_prev, show_cents=show_cents), file=file)
 
 
-def print_indv_summary(file: TextIO, sum_prev: Summary) -> None:
+def print_indv_summary(file: TextIO, sum_prev: Summary, show_cents: bool) -> None:
     print(f'\nTotals for {sum_prev.date()}:', file=file)
-    print(sum_prev, file=file)
+    print(sum_prev.table(show_cents=show_cents), file=file)
 
 
 @dataclass
@@ -93,6 +93,9 @@ class CLArgs:
     suffixes_file: Optional[str] = None
     # Filename containing substrings to remove from the project name,
     # including the whole suffix following the substring
+
+    show_cents: bool = False
+    # Whether to show cents in the output. If False, round to the nearest dollar.
 
 
 def parse_command_line_arguments() -> CLArgs:
@@ -193,6 +196,11 @@ like the -sf option, but reads the substrings from a file
 so that you do not have to type them all out at the 
 command line and can reuse them in multiple runs.''')
 
+    parser.add_argument('-c', '--show-cents', action='store_true',
+                                  help='''\
+If specified, show dollar amounts including cents; 
+default behavior is to round to the nearest dollar.''')
+
     args = parser.parse_args()
     clargs = CLArgs()
 
@@ -227,6 +235,8 @@ command line and can reuse them in multiple runs.''')
 
     if args.suffixes_file is not None:
         clargs.suffixes_file = args.suffixes_file
+
+    clargs.show_cents = args.show_cents
 
     return clargs
 

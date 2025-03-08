@@ -13,8 +13,8 @@ def format_currency(amount: float, show_cents: bool) -> str:
     # but you need the system to have certain locales installed,
     # and I don't want users to run into those stupid errors,
     # so we just manually format the currency.
-    if amount == 0.0:
-        return ''
+    if abs(amount - 0.0) < 0.001:
+        return '' # don't clutter up the table with lots of 0's
     if show_cents:
         return f"${amount:,.2f}" if amount >= 0 else f"-${abs(amount):,.2f}"
     else:

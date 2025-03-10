@@ -1,6 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Iterable, List, Dict, Optional, Union, cast, Any, Sequence
+import re
+from typing import Iterable, List, Dict, Optional, Union, cast, Any, Sequence, Callable, Pattern
 from pathlib import Path
 from openpyxl import load_workbook
 import tabulate
@@ -22,7 +23,7 @@ def tabulate_min_padding(
     # TODO: when tabulate updates to verion 0.9.1, uncomment the following line
     # ,colglobalalign='left')
     # alternately, think about using this fork instead: https://pypi.org/project/tabulate2/
-    tabulate.MIN_PADDING = default_padding # in case user is using the tablulate package themselves
+    tabulate.MIN_PADDING = default_padding  # in case user is using the tablulate package themselves
     return table_tabulated
 
 
@@ -32,7 +33,7 @@ def format_currency(amount: float, show_cents: bool) -> str:
     # and I don't want users to run into those stupid errors,
     # so we just manually format the currency.
     if abs(amount - 0.0) < 0.001:
-        return '' # don't clutter up the table with lots of 0's
+        return ''  # don't clutter up the table with lots of 0's
     if show_cents:
         return f"${amount:,.2f}" if amount >= 0 else f"-${abs(amount):,.2f}"
     else:
@@ -124,6 +125,31 @@ def find_expenses_by_category(summary: ProjectSummary, ws_detail, project_name_h
                 print(f"Unknown category {category}; consider adding it to the list of categories?")
 
 
+def regex_matching_only(string: str) -> Pattern[str]:
+    '''
+    Convert a string to a compiled regular expression pattern that matches only that exact string.
+
+    Args:
+        string (str): The input string to convert
+
+    Returns:
+        Pattern[str]: A compiled regex pattern that will match only the exact input
+    '''
+    # special characters in regex that need escaping
+    special_chars = r'\.^$*+?()[]{}|'
+
+    escaped_chars = []
+    for char in string:
+        if char in special_chars:
+            escaped_chars.append('\\' + char)
+        else:
+            escaped_chars.append(char)
+
+    # Join the list into the final pattern, add anchors to match start and end of string, and compile it
+    pattern_str = '^' + ''.join(escaped_chars) + '$'
+    return re.compile(pattern_str)
+
+
 def extract_date(ws_summary) -> datetime.datetime:
     raw = ws_summary[date_cell].value
     raw = raw.replace('Report Run Date:', '').strip()
@@ -131,7 +157,9 @@ def extract_date(ws_summary) -> datetime.datetime:
     return date_and_time
 
 
-POSSIBLE_HEADERS = ['Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fellowship', 'Indirect', 'Balance', 'Budget']
+POSSIBLE_HEADERS = [
+    'Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fellowship', 'Equipment', 'Indirect', 'Balance', 'Budget',
+]
 
 
 @dataclass
@@ -162,6 +190,7 @@ class Summary:
     @staticmethod
     def from_file(
             fn: Union[str, Path],
+            names_to_clean: dict[str | Pattern, str] | Callable[[str], str] | None = None,
             substrings_to_clean: Iterable[str] = (),
             suffixes_to_clean: Iterable[str] = (),
     ) -> Summary:
@@ -174,14 +203,29 @@ class Summary:
             fn: The filename (or [`pathlib.Path`](<https://docs.python.org/3/library/pathlib.html>) object)
                 of the AggieExpense Excel file to read.
 
-            substrings_to_clean: A list of substrings to remove from the project names
+            names_to_clean: A dict or function mapping project names to "cleaner" (typcailly shorter) names.
+                For example, if ``names_to_clean = {'David Doty ENGR COMPUTER SCIENCE PPM Only': 'CS PPM'}``,
+                then the project name "David Doty ENGR COMPUTER SCIENCE PPM Only" will be replaced with "CS PPM".
+                This is more flexible than using `substrings_to_clean` or `suffixes_to_clean` since it allows
+                arbitrary mappings of project names to cleaner names. Those parameters simply remove substrings
+                or suffixes, respectively, from the project names. This parameter takes precedence over the other two.
+                If a project name appears as a key in this dict, then that project name will not be processed by
+                `substrings_to_clean` or `suffixes_to_clean`. The keys can either be strings or compiled regex patterns.
+
+            substrings_to_clean: A list of substrings to remove from the project names.
 
             suffixes_to_clean: A list of substrings to remove from the project names, including
-                the whole suffix following the substring
+                the whole suffix following the substring.
 
         Returns:
             A [`Summary`][aggie_unterprise.Summary] object containing the summaries of all the projects in the file.
         """
+        if names_to_clean is None:
+            names_to_clean: dict[Pattern, str] = {}
+        else:
+            # normalize keys to be regex's; if a string, replace with regex that matches only that string
+            names_to_clean: dict[Pattern, str] = {regex_matching_only(key) if isinstance(key, str) else key: value
+                                                  for key, value in names_to_clean.items()}
         if isinstance(fn, Path):
             fn = str(fn.resolve())
         wb = load_workbook(filename=fn, read_only=True)
@@ -250,9 +294,17 @@ class Summary:
                 project_name = cast(str, row[summary_col_idxs[task_header]].value)
 
             clean_project_name = project_name
-            clean_project_name = remove_suffix_starting_with(clean_project_name, suffixes_to_clean)
-            clean_project_name = remove_substrings(clean_project_name, substrings_to_clean)
-            clean_project_name = clean_whitespace(clean_project_name)
+            # first check names_to_clean; if nothing matches, only then process substrings and suffixes
+            replaced = False
+            for pattern in names_to_clean.keys():
+                if pattern.fullmatch(project_name):
+                    clean_project_name = names_to_clean[pattern]
+                    replaced = True
+                    break
+            if not replaced:
+                clean_project_name = remove_suffix_starting_with(clean_project_name, suffixes_to_clean)
+                clean_project_name = remove_substrings(clean_project_name, substrings_to_clean)
+                clean_project_name = clean_whitespace(clean_project_name)
 
             if clean_project_name in clean_name_to_orig.keys():
                 # check if iterable suffixes_to_clean is empty
@@ -304,9 +356,10 @@ class Summary:
         """
         if headers is None:
             headers = POSSIBLE_HEADERS
-        for header in headers:
-            if header not in POSSIBLE_HEADERS:
-                raise ValueError(f"Invalid heading: {header}; must be one of {', '.join(POSSIBLE_HEADERS)}")
+        else:
+            for header in headers:
+                if header not in POSSIBLE_HEADERS:
+                    raise ValueError(f"Invalid heading: {header}; must be one of {', '.join(POSSIBLE_HEADERS)}")
 
         table = []
         for project_summary in self.project_summaries:
@@ -333,7 +386,7 @@ class Summary:
             table.append(row)
 
         new_headers = ['Project Name'] + list(headers)
-        colalign = ['left'] + ['right'] * (len(headers) - 1)
+        colalign = ['left'] + ['right'] * len(headers)
         table_tabulated = tabulate_min_padding(table, new_headers, tablefmt, colalign)
         return table_tabulated
 

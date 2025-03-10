@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Iterable, List, Dict, Optional, Union, cast
 from pathlib import Path
 from openpyxl import load_workbook
-from tabulate import tabulate
+import tabulate
 import datetime
 import calendar
 
@@ -114,6 +114,23 @@ def extract_date(ws_summary) -> datetime.datetime:
 
 
 POSSIBLE_HEADERS = ['Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fellowship', 'Indirect', 'Balance', 'Budget']
+
+def tabulate_min_padding(
+        table: Iterable[Iterable[Any]],
+        headers: Sequence[str],
+        tablefmt: str | tabulate.TableFormat,
+        colalign: Iterable[str],
+) -> str:
+    # have to reduce padding using this global variable until tabulate addresses this issue:
+    # https://github.com/astanin/python-tabulate/issues/338
+    default_padding = tabulate.MIN_PADDING
+    tabulate.MIN_PADDING = 0
+    table_tabulated = tabulate.tabulate(table, headers=headers, tablefmt=tablefmt, colalign=colalign)
+    # TODO: when tabulate updates to verion 0.9.1, uncomment the following line
+    # ,colglobalalign='left')
+    # alternately, think about using this fork instead: https://pypi.org/project/tabulate2/
+    tabulate.MIN_PADDING = default_padding # in case user is using the tablulate package themselves
+    return table_tabulated
 
 
 @dataclass
@@ -315,8 +332,8 @@ class Summary:
             table.append(row)
 
         new_headers = ['Project Name'] + list(headers)
-        colalign = ['left'] + ['right'] * (len(new_headers) - 1)
-        table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt, colalign=colalign)
+        colalign = ['left'] + ['right'] * (len(headers) - 1)
+        table_tabulated = tabulate_min_padding(table, new_headers, tablefmt, colalign)
         return table_tabulated
 
     def diff_table(self, summary_earlier: Summary, tablefmt: str = 'rounded_outline',
@@ -402,9 +419,7 @@ class Summary:
         new_headers = ['Project Name'] + headers
         num_expense_cols = len(headers) - 1 if 'Budget' in headers else len(headers)
         colalign = ['left'] + ['right'] * num_expense_cols
-        table_tabulated = tabulate(table, headers=new_headers, tablefmt=tablefmt, colalign=colalign)
-        # TODO: when tabulate updates to verion 0.9.1, uncomment the following line
-        # ,colglobalalign='left')
+        table_tabulated = tabulate_min_padding(table, new_headers, tablefmt, colalign)
         return table_tabulated
 
     def year(self) -> int:

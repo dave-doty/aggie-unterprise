@@ -281,7 +281,7 @@ class Summary:
     def __repr__(self) -> str:
         return self.table()
 
-    def table(self, tablefmt: str = 'rounded_outline', headers: Optional[Iterable[str]] = None,
+    def table(self, tablefmt: str | tabulate.TableFormat = 'rounded_outline', headers: Optional[Iterable[str]] = None,
               show_cents: bool = False) -> str:
         """
         Return a representation of the summary as a string in tabular form.
@@ -337,7 +337,7 @@ class Summary:
         table_tabulated = tabulate_min_padding(table, new_headers, tablefmt, colalign)
         return table_tabulated
 
-    def diff_table(self, summary_earlier: Summary, tablefmt: str = 'rounded_outline',
+    def diff_table(self, summary_earlier: Summary, tablefmt: str | tabulate.TableFormat = 'rounded_outline',
                    headers: Optional[Iterable[str]] = None, show_cents: bool = False) -> str:
         """
         Return a representation of the differences between this summary and `summary_earlier`.

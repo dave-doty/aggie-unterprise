@@ -11,7 +11,7 @@ import calendar
 
 def tabulate_min_padding(
         table: Iterable[Iterable[Any]],
-        headers: Iterable[str],
+        headers: Sequence[str],
         tablefmt: str | tabulate.TableFormat,
         colalign: Iterable[str],
 ) -> str:

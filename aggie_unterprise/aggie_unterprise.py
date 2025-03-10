@@ -1,11 +1,29 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Iterable, List, Dict, Optional, Union, cast
+from typing import Iterable, List, Dict, Optional, Union, cast, Any, Sequence
 from pathlib import Path
 from openpyxl import load_workbook
 import tabulate
 import datetime
 import calendar
+
+
+def tabulate_min_padding(
+        table: Iterable[Iterable[Any]],
+        headers: Sequence[str],
+        tablefmt: str | tabulate.TableFormat,
+        colalign: Iterable[str],
+) -> str:
+    # have to reduce padding using this global variable until tabulate addresses this issue:
+    # https://github.com/astanin/python-tabulate/issues/338
+    default_padding = tabulate.MIN_PADDING
+    tabulate.MIN_PADDING = 0
+    table_tabulated = tabulate.tabulate(table, headers=headers, tablefmt=tablefmt, colalign=colalign)
+    # TODO: when tabulate updates to verion 0.9.1, uncomment the following line
+    # ,colglobalalign='left')
+    # alternately, think about using this fork instead: https://pypi.org/project/tabulate2/
+    tabulate.MIN_PADDING = default_padding # in case user is using the tablulate package themselves
+    return table_tabulated
 
 
 def format_currency(amount: float, show_cents: bool) -> str:
@@ -114,23 +132,6 @@ def extract_date(ws_summary) -> datetime.datetime:
 
 
 POSSIBLE_HEADERS = ['Expenses', 'Salary', 'Travel', 'Supplies', 'Fringe', 'Fellowship', 'Indirect', 'Balance', 'Budget']
-
-def tabulate_min_padding(
-        table: Iterable[Iterable[Any]],
-        headers: Sequence[str],
-        tablefmt: str | tabulate.TableFormat,
-        colalign: Iterable[str],
-) -> str:
-    # have to reduce padding using this global variable until tabulate addresses this issue:
-    # https://github.com/astanin/python-tabulate/issues/338
-    default_padding = tabulate.MIN_PADDING
-    tabulate.MIN_PADDING = 0
-    table_tabulated = tabulate.tabulate(table, headers=headers, tablefmt=tablefmt, colalign=colalign)
-    # TODO: when tabulate updates to verion 0.9.1, uncomment the following line
-    # ,colglobalalign='left')
-    # alternately, think about using this fork instead: https://pypi.org/project/tabulate2/
-    tabulate.MIN_PADDING = default_padding # in case user is using the tablulate package themselves
-    return table_tabulated
 
 
 @dataclass

@@ -3,7 +3,8 @@ from dataclasses import dataclass
 import re
 from typing import Iterable, List, Dict, Optional, Union, cast, Any, Sequence, Callable, Pattern
 from pathlib import Path
-from openpyxl import load_workbook
+from openpyxl import load_workbook, Workbook
+from openpyxl.worksheet.worksheet import Worksheet
 import tabulate
 import datetime
 import calendar
@@ -40,10 +41,7 @@ def format_currency(amount: float, show_cents: bool) -> str:
         return f"${amount:,.0f}" if amount >= 0 else f"-${abs(amount):,.0f}"
 
 
-# TODO: don't hardcode header rows; search for them instead
-
-summary_header_row_idx = 17
-detail_header_row_idx = 17
+# TODO: don't hardcode date cell; search for it instead
 date_cell = 'A3'
 
 MARKDOWN_TABLE_FORMATS = ['github', 'pipe']
@@ -84,7 +82,13 @@ def clean_whitespace(string: str) -> str:
     return ' '.join(string.split())
 
 
-def find_expenses_by_category(summary: ProjectSummary, ws_detail, project_name_header: str, project_name: str) -> None:
+def find_expenses_by_category(
+        summary: ProjectSummary,
+        ws_detail: Worksheet,
+        detail_header_row_idx: int,
+        project_name_header: str,
+        project_name: str,
+) -> None:
     detail_expense_category_header = 'Expenditure Category Name'
     detail_expenses_header = 'Expenses'
     detail_budget_header = 'Budget'
@@ -162,6 +166,13 @@ POSSIBLE_HEADERS = [
 ]
 
 
+def find_header_row(ws: Worksheet) -> int:
+    for row in ws.iter_rows(min_row=1):
+        if row[0].value == 'Award Number':
+            return row[0].row
+    raise ValueError("Couldn't find header row")
+
+
 @dataclass
 class Summary:
     """
@@ -234,6 +245,9 @@ class Summary:
 
         date_report_created = extract_date(ws_summary)
 
+        summary_header_row_idx = find_header_row(ws_summary)
+        detail_header_row_idx = find_header_row(ws_detail)
+
         header_row = ws_summary[summary_header_row_idx]
         assert header_row[0].value == "Award Number"
         project_name_header = 'Project Name'
@@ -247,12 +261,13 @@ class Summary:
         # used to distinguish CS-specific accounts that all have the same project name of
         # "David Doty ENGR COMPUTER SCIENCE PPM Only"
         # In these cases we grab the Task name and used that as the project name instead
-        task_header = 'Task/Subtask Name'
+        task_header = 'Task Name'
+        task_header_legacy = 'Task/Subtask Name' # old name for the task header until April 2025
 
         summary_col_idxs = {}
         for i, cell in enumerate(header_row):
             header = cell.value
-            if header in col_names + [task_header] + [project_type_header]:
+            if header in col_names + [task_header, task_header_legacy, project_type_header]:
                 summary_col_idxs[header] = i
 
         project_names = []
@@ -271,7 +286,7 @@ class Summary:
             expenses = float(expenses_str)
             balance = float(balance_str)
             summary = ProjectSummary(project_name=project_name, balance=balance, budget=budget, expenses=expenses)
-            find_expenses_by_category(summary, ws_detail, project_name_header, project_name)
+            find_expenses_by_category(summary, ws_detail, detail_header_row_idx, project_name_header, project_name)
 
             if project_name in project_names:
                 raise ValueError(f'There are duplicates in the project names: "{project_name}" appears in two '
@@ -291,7 +306,9 @@ class Summary:
                     print("WARNING: Internal project name typically contain the phrase 'PPM Only'; "
                           f'double-check that project "{project_name}" is internal and is the correct project name.')
                 # replace with more specific task name
-                project_name = cast(str, row[summary_col_idxs[task_header]].value)
+                summary_col_idx = summary_col_idxs[task_header] if task_header in summary_col_idxs \
+                    else summary_col_idxs[task_header_legacy]
+                project_name = cast(str, row[summary_col_idx].value)
 
             clean_project_name = project_name
             # first check names_to_clean; if nothing matches, only then process substrings and suffixes
